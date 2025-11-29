@@ -1,7 +1,6 @@
 {
   "name": "debug-tools",
   "version": "1.0.0",
-  "private": true,
   "author": "gausszhou",
   "scripts": {
     "dev": "vite --host",
@@ -13,11 +12,8 @@
   "dependencies": {
     "dayjs": "^1.11.7",
     "js-base64": "^3.7.8",
-    "js-yaml": "^4.1.0",
-    "json-ts": "^1.6.4",
     "localforage": "^1.10.0",
     "monaco-editor": "^0.38.0",
-    "papaparse": "^5.5.3",
     "pinia": "^3.0.3",
     "sql-formatter": "^15.6.10",
     "vue": "^3.5.12",

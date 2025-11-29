@@ -72,25 +72,6 @@ const codeJsonNesting = `{
   "c1.a2": 3
 }`;
 
-const codeJsonYaml = `{
-  "name": "张三",
-  "age": 30,
-  "address": {
-    "street": "人民路",
-    "city": "北京"
-  },
-  "hobbies": ["阅读", "游泳"]
-}`;
-
-const codeYamlJson = `name: 张三
-age: 30
-address:
-  street: 人民路
-  city: 北京
-hobbies:
-  - 阅读
-  - 游泳
-`;
 const codeJsonCsv = `[{
   "a1": 1,
   "a2": 2,
@@ -178,17 +159,7 @@ async function save() {
 async function fetch() {
   const key = `code-tools-${String(route.name)}`;
   await localforage.getItem(key).then(value => {
-    if (route.name == EnumTools.YAML_TO_JSON) {
-      model1 = createEditorModel('', 'yaml');
-      editor1.setModel(model1);
-      model2 = createEditorModel('', 'javascript');
-      editor2.setModel(model2);
-    } else if (route.name == EnumTools.JSON_TO_YAML) {
-      model1 = createEditorModel('', 'javascript');
-      editor1.setModel(model1);
-      model2 = createEditorModel('', 'yaml');
-      editor2.setModel(model2);
-    } else if (route.name == EnumTools.SQL_FORMAT || route.name == EnumTools.SQL_COMPRESS) {
+    if (route.name == EnumTools.SQL_FORMAT || route.name == EnumTools.SQL_COMPRESS) {
       model1 = createEditorModel('', 'sql');
       editor1.setModel(model1);
       model2 = createEditorModel('', 'sql');
@@ -203,13 +174,6 @@ async function fetch() {
       editor1.setModel(model1);
       model2 = createEditorModel('', 'javascript');
       editor2.setModel(model2);
-    }
-
-    if (route.name == EnumTools.YAML_TO_JSON) {
-      model1.setValue((value as string) || codeYamlJson);
-    }
-    if (route.name == EnumTools.JSON_TO_YAML) {
-      model1.setValue((value as string) || codeJsonYaml);
     }
 
     if (route.name == 'text-size') {
