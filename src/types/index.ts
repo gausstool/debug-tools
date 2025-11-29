@@ -1,0 +1,15 @@
+export enum EnumTools {
+    TEXT_SIZE = "text-size",
+    TEXT_DIFF = "text-diff",
+    URL_PARSE = "url-parse",
+    URL_ENCODE = "url-encode",
+    URL_DECODE = "url-decode",
+    CSP_PARSE = "csp-parse",
+    CSP_UNPARSE = "csp-unparse",
+    HTTP_CACHE_ANALYZE = "http-cache-analyze",
+    HTTP_CORS_ANALYZE = "http-cors-analyze",
+    BASE64_ENCODE = "base64-encode",
+    BASE64_DECODE = "base64-decode",
+    SQL_FORMAT = "sql-format",
+    SQL_COMPRESS = "sql-compress",
+}
