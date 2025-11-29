@@ -7,15 +7,19 @@ set -e
 echo "删除旧的构建目录..."
 rm -rf dist
 
-# 构建
+# 修改 .env 文件
+echo "修改 .env 文件..."
 cat << EOF > .env
-VITE_BASE_URL=/json-tools/
-VITE_BUILD_DIR=dist/json-tools
+VITE_BASE_URL=/debug-tools/
+VITE_BUILD_DIR=dist/debug-tools
 EOF
+
+# 构建
+echo "正在构建..."
 npm run build
 
 # 进入构建目录
-cd dist/json-tools
+cd dist/debug-tools
 cp index.html 404.html
 cp index.html mobile.html
 touch .nojekyll # 防止 github pages 忽略 _ 开头的文件
@@ -23,7 +27,7 @@ touch .nojekyll # 防止 github pages 忽略 _ 开头的文件
 # 初始化 git 仓库（如果不存在）
 if [ ! -d .git ]; then
     git init
-    git remote add origin git@github.com:gausstool/json-tools.git
+    git remote add origin git@github.com:gausstool/debug-tools.git
 fi
 
 # 添加所有文件到 git
