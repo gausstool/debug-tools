@@ -11,11 +11,13 @@ import { cspParse } from './modules/csp-parse';
 import { cspUnparse } from './modules/csp-unparse';
 import { httpCacheAnalyze } from './modules/http-cache-analyze';
 import { httpCorsAnalyze } from './modules/http-cors-analyze';
+import { textSort } from './modules/text-sort';
 
 type ToolFunction = (input: string) => string | Promise<string>;
 
 export const methodMap: Record<EnumTools, ToolFunction> = {
   [EnumTools.TEXT_DIFF]: (input: string) => input, // Placeholder for text diff function
+  [EnumTools.TEXT_SORT]: textSort, // Placeholder for text sort function
   [EnumTools.TEXT_SIZE]: sizeofByte,
   [EnumTools.URL_PARSE]: urlParse,
   [EnumTools.URL_ENCODE]: urlEncode,
