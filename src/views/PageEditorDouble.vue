@@ -30,71 +30,11 @@ UTF-8 和 UTF-16 都是 Unicode 标准的字符编码方案，
 因此，在英文文本中，UTF-8 通常是更节省空间的选择，而在 CJK 文本中，UTF-16 通常是更节省空间的选择。
 由于 UTF-8 兼容 ASCII，因此在绝大多数现代应用中，UTF-8 是默认选择。`;
 
-const codeJsonCompress = `{
-  "foo": "bar",
-  "hello": "world"
-}`;
-const codeJsonFormat = `{"foo":"bar","hello":"world"}`;
-const codeJsonParser = `{\"d\":\"{\\\"c\\\":\\\"{\\\\\\\"b\\\\\\\":\\\\\\\"{\\\\\\\\\\\\\\\"a\\\\\\\\\\\\\\\":1}\\\\\\\"}\\\"}\"}`;
-const codeJsonSort = `{
-  "foo": "bar",
-  "hello": "world",
-  "a": 1,
-  "d": 2,
-  "c": 1,
-  "b": {
-    "c": 3,
-    "b": 2,
-    "a": 1
-  }
-}`;
-const codeJson2Ts = `{
-  "foo":"bar",
-  "hello":"world",
-  "test": {
-    "a": 1
-  }
-}`;
-const codeJsonFlat = `{
-  "a1": {
-    "a2": 1
-  },
-  "b1": {
-    "a2": 2
-  },
-  "c1": {
-    "a2": 3
-  }
-}`;
-const codeJsonNesting = `{
-  "a1.a2": 1,
-  "b1.a2": 2,
-  "c1.a2": 3
-}`;
 
-const codeJsonCsv = `[{
-  "a1": 1,
-  "a2": 2,
-  "a3": 3
-}]`;
-
-const codeCsvJson = `Column 1,Column 2,Column 3,Column 4
-1-1,1-2,1-3,1-4
-2-1,2-2,2-3,2-4
-3-1,3-2,3-3,3-4
-4,5,6,7`;
-
-const codeObjectJson = `{
-  a: 1,
-  b: 2,
-  c: 3
-}`;
-
-const codeJson2Obj = `{
-  "a": 1,
-  "b": 2,
-  "c": 3
-}`;
+const codeTextSort = `3. 按字典序排序
+1. 对文本进行排序
+2. 每行一个字符串
+`;
 
 const codeBase64Encode = `你好世界`;
 const codeBase64Decode = `5L2g5aW95LiW55WM`;
@@ -169,6 +109,11 @@ async function fetch() {
       editor1.setModel(model1);
       model2 = createEditorModel('', 'javascript');
       editor2.setModel(model2);
+    } else if (route.name == EnumTools.TEXT_SORT) {
+      model1 = createEditorModel('', 'text');
+      editor1.setModel(model1);
+      model2 = createEditorModel('', 'text');
+      editor2.setModel(model2);
     } else {
       model1 = createEditorModel('', 'javascript');
       editor1.setModel(model1);
@@ -176,74 +121,43 @@ async function fetch() {
       editor2.setModel(model2);
     }
 
-    if (route.name == 'text-size') {
+    if (route.name == EnumTools.TEXT_SIZE) {
       model1.setValue((value as string) || codeSize);
     }
-    if (route.name == 'url-parse') {
+    if (route.name == EnumTools.TEXT_SORT) {
+      model1.setValue((value as string) || codeTextSort);
+    }
+    if (route.name == EnumTools.URL_PARSE) {
       model1.setValue((value as string) || window.location.href);
     }
-    if (route.name == 'base64-encode') {
+    if (route.name == EnumTools.BASE64_ENCODE) {
       model1.setValue((value as string) || codeBase64Encode);
     }
-    if (route.name == 'base64-decode') {
+    if (route.name == EnumTools.BASE64_DECODE) {
       model1.setValue((value as string) || codeBase64Decode);
     }
-    if (route.name == 'url-encode') {
+    if (route.name == EnumTools.URL_ENCODE) {
       model1.setValue((value as string) || codeUrlEncode);
     }
-    if (route.name == 'url-decode') {
+    if (route.name == EnumTools.URL_DECODE) {
       model1.setValue((value as string) || codeUrlDecode);
     }
-    if (route.name == 'csp-parse') {
+    if (route.name == EnumTools.CSP_PARSE) {
       model1.setValue((value as string) || codeCspParse);
     }
-    if (route.name == 'csp-unparse') {
+    if (route.name == EnumTools.CSP_UNPARSE) {
       model1.setValue((value as string) || codeCspUnparse);
     }
-    if (route.name == 'http-cache-analyze') {
+    if (route.name == EnumTools.HTTP_CACHE_ANALYZE) {
       model1.setValue((value as string) || codeHttpCacheAnalyze);
     }
-    if (route.name == 'http-cors-analyze') {
+    if (route.name == EnumTools.HTTP_CORS_ANALYZE) {
       model1.setValue((value as string) || codeHttpCorsAnalyze);
     }
-    if (route.name == 'json-compress') {
-      model1.setValue((value as string) || codeJsonCompress);
-    }
-    if (route.name == 'json-format') {
-      model1.setValue((value as string) || codeJsonFormat);
-    }
-    if (route.name == 'json-parse-deep') {
-      model1.setValue((value as string) || codeJsonParser);
-    }
-    if (route.name == 'json-sort') {
-      model1.setValue((value as string) || codeJsonSort);
-    }
-    if (route.name == 'json-to-ts') {
-      model1.setValue((value as string) || codeJson2Ts);
-    }
-    if (route.name == 'json-flat') {
-      model1.setValue((value as string) || codeJsonFlat);
-    }
-    if (route.name == 'json-nesting') {
-      model1.setValue((value as string) || codeJsonNesting);
-    }
-    if (route.name == 'json-to-csv') {
-      model1.setValue((value as string) || codeJsonCsv);
-    }
-    if (route.name == 'csv-to-json') {
-      model1.setValue((value as string) || codeCsvJson);
-    }
-
-    if (route.name == 'obj-to-json') {
-      model1.setValue((value as string) || codeObjectJson);
-    }
-    if (route.name == 'json-to-obj') {
-      model1.setValue((value as string) || codeJson2Obj);
-    }
-    if (route.name == 'sql-format') {
+    if (route.name == EnumTools.SQL_FORMAT) {
       model1.setValue((value as string) || codeSqlFormat);
     }
-    if (route.name == 'sql-compress') {
+    if (route.name == EnumTools.SQL_COMPRESS) {
       model1.setValue((value as string) || codeSqlCompress);
     }
   });
