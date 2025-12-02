@@ -31,9 +31,10 @@ UTF-8 和 UTF-16 都是 Unicode 标准的字符编码方案，
 由于 UTF-8 兼容 ASCII，因此在绝大多数现代应用中，UTF-8 是默认选择。`;
 
 
-const codeTextSort = `对文本进行排序
-每行一个字符串
-按字典序排序`;
+const codeTextSort = `3. 按字典序排序
+1. 对文本进行排序
+2. 每行一个字符串
+`;
 
 const codeBase64Encode = `你好世界`;
 const codeBase64Decode = `5L2g5aW95LiW55WM`;
