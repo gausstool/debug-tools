@@ -1,4 +1,5 @@
 import { EnumTools } from './types';
+import PageRegExp from './views/PageRegExp.vue';
 const EditorDiff = () => import('@/views/PageEditorDiff.vue');
 const EditorDouble = () => import('@/views/PageEditorDouble.vue');
 const PageWelcome = () => import('@/views/PageWelcome.vue');
@@ -46,6 +47,14 @@ export const tools: ITool[] = [
     component: EditorDouble,
     order: 4,
     description: '计算文本字符串的字节大小',
+  },
+  {
+    icon: '🔍',
+    label: '正则表达式',
+    value: EnumTools.REGEX_TEST,
+    component: PageRegExp,
+    order: 5,
+    description: '测试正则表达式对文本字符串的匹配情况',
   },
   {
     icon: '🔗',
@@ -130,7 +139,7 @@ export const tools: ITool[] = [
     label: 'SQL 相关工具',
     value: '',
     component: EditorDouble,
-    order: 100,
+    order: 500,
     space: true,
   },
   {
