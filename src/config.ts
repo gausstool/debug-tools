@@ -32,11 +32,19 @@ export const tools: ITool[] = [
     description: '对比两个文本字符串的差异',
   },
   {
+    icon: '🔍',
+    label: 'TEXT 排序',
+    value: EnumTools.TEXT_SORT,
+    component: EditorDouble,
+    order: 3,
+    description: '对文本字符串进行排序',
+  },
+  {
     icon: '📐',
     label: 'TEXT 大小',
     value: EnumTools.TEXT_SIZE,
     component: EditorDouble,
-    order: 3,
+    order: 4,
     description: '计算文本字符串的字节大小',
   },
   {
@@ -44,7 +52,7 @@ export const tools: ITool[] = [
     label: 'URL 解析',
     value: EnumTools.URL_PARSE,
     component: EditorDouble,
-    order: 4,
+    order: 101,
     description: '解析 URL 字符串，提取协议、主机、端口、路径等信息',
   },
   {
@@ -52,7 +60,7 @@ export const tools: ITool[] = [
     label: 'URL 编码',
     value: EnumTools.URL_ENCODE,
     component: EditorDouble,
-    order: 6,
+    order: 102,
     description: '对 URL 字符串进行编码，替换特殊字符',
   },
   {
@@ -60,7 +68,7 @@ export const tools: ITool[] = [
     label: 'URL 解码',
     value: EnumTools.URL_DECODE,
     component: EditorDouble,
-    order: 7,
+    order: 103,
     description: '对 URL 字符串进行解码，恢复特殊字符',
   },
   {
@@ -68,7 +76,7 @@ export const tools: ITool[] = [
     label: 'Base64 编码',
     value: EnumTools.BASE64_ENCODE,
     component: EditorDouble,
-    order: 8,
+    order: 201,
     description: '对文本字符串进行 Base64 编码',
   },
   {
@@ -76,7 +84,7 @@ export const tools: ITool[] = [
     label: 'Base64 解码',
     value: EnumTools.BASE64_DECODE,
     component: EditorDouble,
-    order: 9,
+    order: 202,
     description: '对 Base64 编码的字符串进行解码',
   },
   {

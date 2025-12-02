@@ -1,6 +1,7 @@
 export enum EnumTools {
     TEXT_SIZE = "text-size",
     TEXT_DIFF = "text-diff",
+    TEXT_SORT = "text-sort",
     URL_PARSE = "url-parse",
     URL_ENCODE = "url-encode",
     URL_DECODE = "url-decode",
