@@ -1,0 +1,1 @@
+import{_ as e,c as t,o as c,b as n,e as s}from"./index-DXuaxIZY.js";const r={},a={class:"layout-no-console"};function _(l,i){const o=s("router-view");return c(),t("div",a,[n(o)])}const d=e(r,[["render",_]]);export{d as default};
