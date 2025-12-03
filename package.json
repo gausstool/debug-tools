@@ -1,6 +1,6 @@
 {
   "name": "debug-tools",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "gausszhou",
   "scripts": {
     "dev": "vite --host",

@@ -6,7 +6,7 @@
   right: 0px;
   height: var(--terminal-height);
   background-color: #1e1e1e;
-  border-top: 1px solid #393939;
+  border-top: 2px solid #272727;
   border-radius: 0 0 8px 8px;
   overflow: hidden;
 }
