@@ -14,7 +14,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-  --terminal-height:  60px;
+  --terminal-height: 60px;
 }
 
 .ml-1x {
@@ -26,17 +26,17 @@ body {
 }
 
 a {
-  color:#409eff;
+  color: #409eff;
 }
 
 a:hover {
-  color:#409eff;
+  color: #409eff;
 }
 
 #app {
   width: 100vw;
   height: 100vh;
-  background-color: #ffffff;
+  background-color: #f6f6f6;
   display: flex;
   align-items: center;
   justify-content: center;

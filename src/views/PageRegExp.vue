@@ -9,14 +9,16 @@
       </div>
       <div class="regexp-result">
         <table>
-          <tr>
-            <th>索引</th>
-            <th>匹配项</th>
-          </tr>
-          <tr v-for="(item, index) in result" :key="index">
-            <td>{{ index }}</td>
-            <td>{{ item }}</td>
-          </tr>
+          <tbody>
+            <tr>
+              <th>索引</th>
+              <th>匹配项</th>
+            </tr>
+            <tr v-for="(item, index) in result" :key="index">
+              <td>{{ index }}</td>
+              <td>{{ item }}</td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -34,13 +36,13 @@ const result = computed(() => regexMatch(regExp.value, input.value));
 <style lang="scss" scoped>
 .page-regexp {
   padding: 20px;
-  padding-top: 0px;
   background-color: #1e1e1e;
   height: 100%;
 }
 
 .regexp-container {
   padding: 20px;
+  height: calc(100% - 140px);
   background-color: #272727;
 }
 
@@ -59,6 +61,10 @@ const result = computed(() => regexMatch(regExp.value, input.value));
     resize: none;
     font-family: Consolas, 'Courier New', monospace;
     font-size: 14px;
+    border: 1px solid #272727;
+    &:focus {
+      border: 1px solid #424242;
+    }
   }
 }
 .regexp-result {
