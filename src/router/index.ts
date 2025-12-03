@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { tools, defaultTool } from '../config';
 import { isMobile } from '@/utils';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 
 // 动态生成路由配置
 const routes = [
@@ -53,6 +55,7 @@ const router = createRouter({
 
 // 路由守卫
 router.beforeEach((to, from, next) => {
+  NProgress.start();
   if (isMobile()) {
     if (to.path !== '/mobile') {
       next({ name: 'mobile' });
@@ -66,6 +69,10 @@ router.beforeEach((to, from, next) => {
       next();
     }
   }
+});
+
+router.afterEach(() => {
+  NProgress.done();
 });
 
 export default router;

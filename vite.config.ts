@@ -9,7 +9,7 @@ export default defineConfig(async () => ({
   plugins: [nodePolyfills(), vue()],
   clearScreen: false,
   server: {
-    port: 1997,
+    port: 1998,
     strictPort: true,
   },
   resolve: {
