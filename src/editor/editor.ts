@@ -1,23 +1,23 @@
-import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import { editor, KeyCode, KeyMod } from "monaco-editor/esm/vs/editor/editor.api";
 import "monaco-editor/esm/vs/basic-languages/javascript/javascript.contribution";
 import 'monaco-editor/esm/vs/basic-languages/yaml/yaml.contribution';
 import 'monaco-editor/esm/vs/basic-languages/sql/sql.contribution';
 
 export function createEditorModel(value: string, language: string) {
-  const model = monaco.editor.createModel(value, language);
+  const model = editor.createModel(value, language);
   return model;
 }
 
-export function setModelLanguage(model: monaco.editor.ITextModel, language: string) {
-  monaco.editor.setModelLanguage(model, language);
+export function setModelLanguage(model: editor.ITextModel, language: string) {
+  editor.setModelLanguage(model, language);
 }
 
 export function createEditorInstance(
   $container: HTMLElement,
-  model: monaco.editor.ITextModel,
-  option?: monaco.editor.IStandaloneEditorConstructionOptions
+  model: editor.ITextModel,
+  option?: editor.IStandaloneEditorConstructionOptions
 ) {
-  const editor = monaco.editor.create($container, {
+  const editorIns = editor.create($container, {
     theme: "vs-dark",
     automaticLayout: true, // 自动布局
     folding: true,
@@ -25,64 +25,30 @@ export function createEditorInstance(
     model: model,
     ...option,
   });
-  return editor;
+  return editorIns;
 }
 
 export function createEditorDiff($container: HTMLElement) {
-  const editor = monaco.editor.createDiffEditor($container, {
+  const editorIns = editor.createDiffEditor($container, {
     foldingStrategy: "indentation",
     autoClosingOvertype: "always",
     autoIndent: "full",
-    // 
     theme: "vs-dark",
     automaticLayout: true, // 自动布局
     diffAlgorithm: "advanced",
     originalEditable: true, // for left pane
     readOnly: false, // for right pane
   });
-  return editor;
-}
-
-// 初始化变量
-let editorList: any[] = [];
-export function addEditorIntoManageList(editor: monaco.editor.IStandaloneCodeEditor | monaco.editor.IStandaloneDiffEditor) {
-  editorList.push(editor);
-}
-
-export function disposeEditorList() {
-  editorList.forEach((editor) => {
-    editor.dispose();
-  });
-  editorList = [];
+  return editorIns;
 }
 
 export function addCommandSave(
-  editor: monaco.editor.IStandaloneCodeEditor | monaco.editor.IStandaloneDiffEditor,
+  editor: editor.IStandaloneCodeEditor | editor.IStandaloneDiffEditor,
   callback: () => void
 ) {
-  editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function () {
+  editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyS, function () {
     if (callback) {
       callback();
     }
   });
 }
-
-// container
-let fileCounter = 0;
-export function createEditorContainer() {
-  const $container = document.createElement("div");
-  $container.id = "container-" + fileCounter.toString(10);
-  $container.className = "container";
-  fileCounter += 1; // id++
-  return $container;
-}
-
-export function addContainer($parent: HTMLElement, $children: HTMLElement) {
-  if ($parent) {
-    $parent.appendChild($children);
-  } else {
-    console.log($parent, "is not a HTMLElement");
-  }
-}
-
-export default {};

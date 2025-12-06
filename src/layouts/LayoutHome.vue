@@ -3,6 +3,7 @@
     <div class="home-container">
       <div class="home-header">
         <MacIconButton></MacIconButton>
+        <a href="https://github.com/gausstool/debug-tools">Github</a>
       </div>
       <div class="home-main">
         <div class="menu-container">
@@ -27,16 +28,14 @@
       </div>
     </div>
   </div>
-  <GithubBadge url="https://github.com/gausstool/debug-tools"></GithubBadge>
 </template>
 
 <script lang="ts" setup>
-import GithubBadge from '@/components/github-badge.vue';
 import { ITool, tools } from '@/config';
 import { useRoute, useRouter } from 'vue-router';
 import { useToolsStore } from '@/store';
 import { EnumTools } from '@/types';
-import MacIconButton from '@/components/mac-icon-button.vue';
+import MacIconButton from '@/components/MacIconButton.vue';
 
 const { addRecentTool } = useToolsStore();
 const route = useRoute();
@@ -74,7 +73,6 @@ const onRadioClick = async (tool: ITool) => {
   overflow: hidden;
   box-shadow: 1px 1px 10px #1e1e1e;
   overflow: hidden;
-  border-radius: 8px;
 }
 
 .home-header {

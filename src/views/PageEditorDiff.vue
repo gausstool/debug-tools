@@ -1,21 +1,25 @@
 <template>
-  <div class="page-editor-diff" id="editor-diff"></div>
+  <div class="page-editor-diff" id="editor-diff">
+    <div ref="editor1Container" class="container"></div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import localforage from 'localforage';
-import { onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted, ref, shallowRef } from 'vue';
 import { useRoute } from 'vue-router';
-import editorConsoleInstance from '../editor/console';
 import {
   addCommandSave,
-  addContainer,
-  addEditorIntoManageList,
-  createEditorContainer,
   createEditorDiff,
   createEditorModel,
-  disposeEditorList,
 } from '../editor/editor';
+import { EditorManager } from '@/editor/editor-manager';
+
+// 使用ref来存储编辑器实例
+const editor1Container = ref<HTMLDivElement>();
+const editor1 = shallowRef<any>(null);
+const model1 = shallowRef<any>(null);
+const model2 = shallowRef<any>(null);
 
 const code1Default = `// 粘贴需要进行比对的代码
 void main() {
@@ -28,45 +32,50 @@ function main() {
   console.log("Hello World!"); 
 }
 `;
-const model1 = createEditorModel('', 'javascript');
-const model2 = createEditorModel('', 'javascript');
-const $container1 = createEditorContainer();
-const editor1 = createEditorDiff($container1);
-
-editor1.setModel({
-  original: model1,
-  modified: model2,
-});
-
 const route = useRoute();
 
+async function initEditors() {
+  if (!editor1Container.value) {
+    return;
+  }
+  // 异步创建编辑器模型和实例
+  model1.value = await createEditorModel('', 'javascript');
+  model2.value = await createEditorModel('', 'javascript');
+  
+  editor1.value = await createEditorDiff(editor1Container.value);
+  
+  editor1.value.setModel({
+    original: model1.value,
+    modified: model2.value,
+  });
+  
+  // 添加保存命令
+  await addCommandSave(editor1.value, async () => {
+    await save();
+  });
+  // 添加编辑器到管理列表
+  EditorManager.addEditor(editor1.value);
+}
+
 async function save() {
-  const code1 = model1.getValue();
-  const code2 = model2.getValue();
-  await localforage.setItem(`code-tools-${String(route.name)}`, { code1, code2 });
-  editorConsoleInstance.addConsole('\t[INFO]\t' + 'Save Success');
+  const code1 = model1.value.getValue();
+  const code2 = model2.value.getValue();
+  await localforage.setItem(`debug-tools-${String(route.name)}`, { code1, code2 });
 }
 
 async function fetch() {
-  await localforage.getItem(`code-tools-${String(route.name)}`).then((value: any) => {
-    const { code1 = '', code2 = '' } = value || {};
-    model1.setValue(code1 || code1Default);
-    model2.setValue(code2 || code2Default);
-  });
-  editorConsoleInstance.addConsole('\t[INFO]\t' + 'Fetch Success');
+  const value: any = await localforage.getItem(`debug-tools-${String(route.name)}`);
+  const { code1 = '', code2 = '' } = value || {};
+  model1.value.setValue(code1 || code1Default);
+  model2.value.setValue(code2 || code2Default);
 }
 
-addCommandSave(editor1, async () => {
-  save();
-});
-
 onMounted(async () => {
-  addEditorIntoManageList(editor1);
-  addContainer(document.getElementById('editor-diff') as HTMLDivElement, $container1);
+  await initEditors();
   await fetch();
 });
 
 onUnmounted(() => {
-  disposeEditorList();
+  EditorManager.dispose();
 });
 </script>

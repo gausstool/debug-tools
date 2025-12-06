@@ -1,23 +1,26 @@
 <template>
-  <div class="page-editor-double" id="editor-double"></div>
+  <div class="page-editor-double" id="editor-double">
+    <div ref="editor1Container" class="container"></div>
+    <div ref="editor2Container" class="container"></div>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import localforage from 'localforage';
-import { onMounted, onUnmounted, watch } from 'vue';
+import { onMounted, onUnmounted, watch, ref, shallowRef } from 'vue';
 import { useRoute } from 'vue-router';
-import editorConsoleInstance from '../editor/console';
-import {
-  addCommandSave,
-  addContainer,
-  addEditorIntoManageList,
-  createEditorContainer,
-  createEditorInstance,
-  createEditorModel,
-  disposeEditorList,
-} from '../editor/editor';
-import { processContent } from '../transform';
+import { addCommandSave, createEditorInstance, createEditorModel } from '@/editor/editor';
+import { processContent } from '@/transform';
 import { EnumTools } from '@/types';
+import { EditorManager } from '@/editor/editor-manager';
+
+// 使用ref来存储编辑器实例
+const editor1Container = ref<HTMLDivElement>();
+const editor2Container = ref<HTMLDivElement>();
+const editor1 = shallowRef<any>(null);
+const editor2 = shallowRef<any>(null);
+const model1 = shallowRef<any>(null);
+const model2 = shallowRef<any>(null);
 
 const codeSize = `计算字符串所占的内存字节数，
 使用 UTF-8 和 UTF-16 的编码方式计算。
@@ -29,7 +32,6 @@ UTF-8 和 UTF-16 都是 Unicode 标准的字符编码方案，
 对于英文文本，UTF-8 通常需要只需要 1 个字节，而 UTF-16 通常需要 2 个字节来表示一个字符。
 因此，在英文文本中，UTF-8 通常是更节省空间的选择，而在 CJK 文本中，UTF-16 通常是更节省空间的选择。
 由于 UTF-8 兼容 ASCII，因此在绝大多数现代应用中，UTF-8 是默认选择。`;
-
 
 const codeTextSort = `3. 按字典序排序
 1. 对文本进行排序
@@ -80,99 +82,114 @@ ORDER BY
   created_at DESC 
 LIMIT 10;`;
 
-let model1 = createEditorModel('', 'javascript');
-let model2 = createEditorModel('', 'javascript');
-const $container1 = createEditorContainer();
-const $container2 = createEditorContainer();
-const editor1 = createEditorInstance($container1, model1);
-const editor2 = createEditorInstance($container2, model2, { readOnly: true }); // 第二个编辑器为只读
-
 const route = useRoute();
 
 async function save() {
-  const code1 = model1.getValue();
-  const key = `code-tools-${String(route.name)}`;
+  const code1 = model1.value.getValue();
+  const key = `debug-tools-${String(route.name)}`;
   await localforage.setItem(key, code1);
-  editorConsoleInstance.addConsole('\t[INFO]\t' + 'Save Success');
+}
+
+async function initEditors() {
+  if (!editor1Container.value || !editor2Container.value) {
+    return;
+  }
+  // 异步创建编辑器模型和实例
+  model1.value = await createEditorModel('', 'javascript');
+  model2.value = await createEditorModel('', 'javascript');
+  editor1.value = await createEditorInstance(editor1Container.value, model1.value);
+  editor2.value = await createEditorInstance(editor2Container.value, model2.value, { readOnly: true }); // 第二个编辑器为只读
+
+  // 添加保存命令
+  await addCommandSave(editor1.value, async () => {
+    await save();
+  });
+
+  // 设置内容变化监听器
+  editor1.value.onDidChangeModelContent(() => {
+    excute();
+  });
+
+  // 添加编辑器到管理列表
+  EditorManager.addEditor(editor1.value);
+  EditorManager.addEditor(editor2.value);
 }
 
 async function fetch() {
   const key = `code-tools-${String(route.name)}`;
-  await localforage.getItem(key).then(value => {
-    if (route.name == EnumTools.SQL_FORMAT || route.name == EnumTools.SQL_COMPRESS) {
-      model1 = createEditorModel('', 'sql');
-      editor1.setModel(model1);
-      model2 = createEditorModel('', 'sql');
-      editor2.setModel(model2);
-    } else if (route.name == EnumTools.TEXT_SIZE) {
-      model1 = createEditorModel('', 'text');
-      editor1.setModel(model1);
-      model2 = createEditorModel('', 'javascript');
-      editor2.setModel(model2);
-    } else if (route.name == EnumTools.TEXT_SORT) {
-      model1 = createEditorModel('', 'text');
-      editor1.setModel(model1);
-      model2 = createEditorModel('', 'text');
-      editor2.setModel(model2);
-    } else {
-      model1 = createEditorModel('', 'javascript');
-      editor1.setModel(model1);
-      model2 = createEditorModel('', 'javascript');
-      editor2.setModel(model2);
-    }
+  const value = await localforage.getItem(key);
+  // 根据路由类型设置模型语言
+  let model1Language = 'javascript';
+  let model2Language = 'javascript';
 
-    if (route.name == EnumTools.TEXT_SIZE) {
-      model1.setValue((value as string) || codeSize);
-    }
-    if (route.name == EnumTools.TEXT_SORT) {
-      model1.setValue((value as string) || codeTextSort);
-    }
-    if (route.name == EnumTools.URL_PARSE) {
-      model1.setValue((value as string) || window.location.href);
-    }
-    if (route.name == EnumTools.BASE64_ENCODE) {
-      model1.setValue((value as string) || codeBase64Encode);
-    }
-    if (route.name == EnumTools.BASE64_DECODE) {
-      model1.setValue((value as string) || codeBase64Decode);
-    }
-    if (route.name == EnumTools.URL_ENCODE) {
-      model1.setValue((value as string) || codeUrlEncode);
-    }
-    if (route.name == EnumTools.URL_DECODE) {
-      model1.setValue((value as string) || codeUrlDecode);
-    }
-    if (route.name == EnumTools.CSP_PARSE) {
-      model1.setValue((value as string) || codeCspParse);
-    }
-    if (route.name == EnumTools.CSP_UNPARSE) {
-      model1.setValue((value as string) || codeCspUnparse);
-    }
-    if (route.name == EnumTools.HTTP_CACHE_ANALYZE) {
-      model1.setValue((value as string) || codeHttpCacheAnalyze);
-    }
-    if (route.name == EnumTools.HTTP_CORS_ANALYZE) {
-      model1.setValue((value as string) || codeHttpCorsAnalyze);
-    }
-    if (route.name == EnumTools.SQL_FORMAT) {
-      model1.setValue((value as string) || codeSqlFormat);
-    }
-    if (route.name == EnumTools.SQL_COMPRESS) {
-      model1.setValue((value as string) || codeSqlCompress);
-    }
-  });
-  editorConsoleInstance.addConsole('\t[INFO]\t' + 'Fetch Success');
+  if (route.name == EnumTools.SQL_FORMAT || route.name == EnumTools.SQL_COMPRESS) {
+    model1Language = 'sql';
+    model2Language = 'sql';
+  } else if (route.name == EnumTools.TEXT_SIZE) {
+    model1Language = 'text';
+    model2Language = 'javascript';
+  } else if (route.name == EnumTools.TEXT_SORT) {
+    model1Language = 'text';
+    model2Language = 'text';
+  }
+
+  // 重新创建模型
+  model1.value = await createEditorModel('', model1Language);
+  model2.value = await createEditorModel('', model2Language);
+
+  editor1.value.setModel(model1.value);
+  editor2.value.setModel(model2.value);
+
+  // 设置默认值
+  let defaultValue = '';
+  if (route.name == EnumTools.TEXT_SIZE) {
+    defaultValue = codeSize;
+  } else if (route.name == EnumTools.TEXT_SORT) {
+    defaultValue = codeTextSort;
+  } else if (route.name == EnumTools.URL_PARSE) {
+    defaultValue = window.location.href;
+  } else if (route.name == EnumTools.BASE64_ENCODE) {
+    defaultValue = codeBase64Encode;
+  } else if (route.name == EnumTools.BASE64_DECODE) {
+    defaultValue = codeBase64Decode;
+  } else if (route.name == EnumTools.URL_ENCODE) {
+    defaultValue = codeUrlEncode;
+  } else if (route.name == EnumTools.URL_DECODE) {
+    defaultValue = codeUrlDecode;
+  } else if (route.name == EnumTools.CSP_PARSE) {
+    defaultValue = codeCspParse;
+  } else if (route.name == EnumTools.CSP_UNPARSE) {
+    defaultValue = codeCspUnparse;
+  } else if (route.name == EnumTools.HTTP_CACHE_ANALYZE) {
+    defaultValue = codeHttpCacheAnalyze;
+  } else if (route.name == EnumTools.HTTP_CORS_ANALYZE) {
+    defaultValue = codeHttpCorsAnalyze;
+  } else if (route.name == EnumTools.SQL_FORMAT) {
+    defaultValue = codeSqlFormat;
+  } else if (route.name == EnumTools.SQL_COMPRESS) {
+    defaultValue = codeSqlCompress;
+  }
+
+  model1.value.setValue((value as string) || defaultValue);
+  excute();
 }
 
-addCommandSave(editor1, async () => {
-  save();
-});
+async function excute() {
+  const value1 = editor1.value.getValue();
+  const type = route.name as EnumTools; // 默认类型为 text-size
+  try {
+    const [value] = await processContent(value1, type);
+    model2.value.setValue(value);
+  } catch (error: any) {
+    editor2.value.setValue(error.message);
+  }
+}
 
 onMounted(async () => {
-  addEditorIntoManageList(editor1);
-  addEditorIntoManageList(editor2);
-  addContainer(document.getElementById('editor-double') as HTMLElement, $container1);
-  addContainer(document.getElementById('editor-double') as HTMLElement, $container2);
+  // 初始化编辑器
+  await initEditors();
+
+  // 加载数据
   await fetch();
 });
 
@@ -181,28 +198,6 @@ watch(route, async () => {
 });
 
 onUnmounted(() => {
-  disposeEditorList();
-});
-
-async function excute() {
-  const value1 = editor1.getValue();
-  const type = route.name as EnumTools; // 默认类型为 text-size
-  try {
-    const [value, flag] = await processContent(value1, type);
-    model2.setValue(value);
-    if (flag === 'unrealized') {
-      editorConsoleInstance.addConsole('\t[WARN]\t' + 'Format Unrealized');
-    }
-    if (flag === 'success') {
-      editorConsoleInstance.addConsole('\t[INFO]\t' + 'Format Success');
-    }
-  } catch (error: any) {
-    editor2.setValue('');
-    editorConsoleInstance.addConsole('\t[Error]\t' + error.message);
-  }
-}
-
-editor1.onDidChangeModelContent(() => {
-  excute();
+  EditorManager.dispose();
 });
 </script>

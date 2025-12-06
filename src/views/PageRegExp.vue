@@ -36,13 +36,14 @@ const result = computed(() => regexMatch(regExp.value, input.value));
 <style lang="scss" scoped>
 .page-regexp {
   padding: 20px;
+  padding-top: 0px;
   background-color: #1e1e1e;
   height: 100%;
 }
 
 .regexp-container {
   padding: 20px;
-  height: calc(100% - 140px);
+  height: 100%;
   background-color: #272727;
 }
 
