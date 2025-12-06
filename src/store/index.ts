@@ -1,4 +1,4 @@
-import { EnumTools } from '@/types';
+import { EnumTools } from '@/domain/transform/types';
 import localforage from 'localforage';
 import { defineStore } from 'pinia';
 import { onMounted, ref, unref } from 'vue';

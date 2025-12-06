@@ -1,5 +1,5 @@
 import { EnumTools } from './types';
-import PageRegExp from './views/PageRegExp.vue';
+import PageRegExp from '@/views/PageRegExp.vue';
 import PageWelcome from '@/views/PageWelcome.vue';
 const EditorDiff = () => import('@/views/PageEditorDiff.vue');
 const EditorDouble = () => import('@/views/PageEditorDouble.vue');
@@ -159,13 +159,6 @@ export const tools: ITool[] = [
     description: '格式化 SQL 语句，添加换行和缩进',
   },
 ].sort((a, b) => a.order - b.order);
-
-// 按功能分类的工具配置
-export const toolCategories = {
-  textTools: tools.filter(tool => tool.order >= 100 && tool.order < 200),
-  jsonTools: tools.filter(tool => tool.order >= 200 && tool.order < 300),
-  sqlTools: tools.filter(tool => tool.order >= 300 && tool.order < 400),
-};
 
 // 导出默认路由配置
 export const defaultTool = 'welcome';

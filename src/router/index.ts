@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { tools, defaultTool } from '../config';
+import { tools, defaultTool } from '../domain/transform';
 import { isMobile } from '@/utils';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
