@@ -2,13 +2,13 @@
 
 import { sqlFormat } from "./sql-format";
 
-export function sqlCompress(input: string): string {
+export async function sqlCompress(input: string): Promise<string> {
   try {
     if (!input || input.trim() === '') {
       return '';
     }
 
-    let result = sqlFormat(input);
+    let result = await sqlFormat(input);
     
     // 1. 移除块注释 /* ... */
     result = result.replace(/\/\*[\s\S]*?\*\//g, '');

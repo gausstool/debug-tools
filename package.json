@@ -1,6 +1,6 @@
 {
   "name": "debug-tools",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "author": "gausszhou",
   "scripts": {
     "dev": "vite --host",
@@ -14,6 +14,7 @@
     "js-base64": "^3.7.8",
     "localforage": "^1.10.0",
     "monaco-editor": "^0.38.0",
+    "nprogress": "^0.2.0",
     "pinia": "^3.0.3",
     "sql-formatter": "^15.6.10",
     "vue": "^3.5.12",
@@ -23,6 +24,7 @@
     "@eslint/js": "^9.26.0",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.14.1",
+    "@types/nprogress": "^0.2.3",
     "@types/papaparse": "^5.3.16",
     "@vitejs/plugin-vue": "^5.2.4",
     "adm-zip": "^0.5.16",

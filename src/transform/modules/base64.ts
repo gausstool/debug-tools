@@ -1,8 +1,9 @@
-import { encode, decode } from 'js-base64'
-export function encodeBase64(input: string) {
-    return encode(input);
+export async function encodeBase64(input: string) {
+  const { encode } = await import('js-base64');
+  return encode(input);
 }
 
-export function decodeBase64(input: string) {
-    return decode(input);
+export async function decodeBase64(input: string) {
+  const { decode } = await import('js-base64');
+  return decode(input);
 }
