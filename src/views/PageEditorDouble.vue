@@ -10,8 +10,8 @@ import localforage from 'localforage';
 import { onMounted, onUnmounted, watch, ref, shallowRef } from 'vue';
 import { useRoute } from 'vue-router';
 import { addCommandSave, createEditorInstance, createEditorModel } from '@/domain/editor/editor';
-import { processContent } from '@/transform';
-import { EnumTools } from '@/types';
+import { processContent } from '@/domain/transform/modules';
+import { EnumTools } from '@/domain/transform/types';
 import { EditorManager } from '@/domain/editor/editor-manager';
 
 // 使用ref来存储编辑器实例

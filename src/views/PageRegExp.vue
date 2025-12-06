@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-import { regexMatch } from '@/transform/modules/regexp';
+import { regexMatch } from '@/domain/transform/modules/regexp';
 import { ref, computed } from 'vue';
 const regExp = ref('(\\w+)(\\d+)');
 const input = ref('abc123abc');

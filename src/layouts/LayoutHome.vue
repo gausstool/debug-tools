@@ -31,10 +31,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ITool, tools } from '@/config';
+import { ITool, tools } from '@/domain/transform';
 import { useRoute, useRouter } from 'vue-router';
 import { useToolsStore } from '@/store';
-import { EnumTools } from '@/types';
+import { EnumTools } from '@/domain/transform/types';
 import MacIconButton from '@/components/MacIconButton.vue';
 
 const { addRecentTool } = useToolsStore();

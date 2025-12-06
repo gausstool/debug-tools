@@ -12,7 +12,7 @@ import {
   addCommandSave,
   createEditorDiff,
   createEditorModel,
-} from '../domain/editor/editor';
+} from '@/domain/editor/editor';
 import { EditorManager } from '@/domain/editor/editor-manager';
 
 // 使用ref来存储编辑器实例

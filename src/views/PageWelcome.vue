@@ -32,9 +32,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ITool, tools } from '@/config';
+import { ITool, tools } from '@/domain/transform';
 import { useToolsStore } from '@/store';
-import { EnumTools } from '@/types';
+import { EnumTools } from '@/domain/transform/types';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter();
