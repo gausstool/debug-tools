@@ -24,7 +24,7 @@ export default defineConfig(async () => ({
         manualChunks(id: string) {
           if (id.includes('node_modules') || id.includes('.pnpm')) {
             if (id.includes('monaco-editor/esm')) {
-              return 'editor';
+              return 'monaco-editor';
             }
             if (id.includes('sql-formatter')) {
               return 'sql-formatter';

@@ -34,13 +34,15 @@ export const useToolsStore = defineStore('tools', () => {
     }
     recentTools.value.unshift(tool);
     // 持久化到本地
-    localforage.setItem('tools', JSON.stringify(unref(recentTools)));
+    localforage.setItem('debug-tools', JSON.stringify(unref(recentTools)));
   }
 
   onMounted(() => {
-    localforage.getItem('tools').then(list => {
-      const toolsList = getJsonSafe(list as string, createDefaultTools()) || createDefaultTools();
-      recentTools.value = toolsList.slice(0, MAX_TOOLS) as EnumTools[];
+    localforage.getItem('debug-tools').then(list => {
+      recentTools.value = getJsonSafe(list as string, []) || [];
+      if (recentTools.value.length === 0) {
+        recentTools.value.push(...createDefaultTools());
+      }
     });
   });
   return { recentTools, addRecentTool };
