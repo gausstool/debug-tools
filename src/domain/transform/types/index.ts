@@ -14,4 +14,7 @@ export enum EnumTools {
     BASE64_DECODE = "base64-decode",
     SQL_FORMAT = "sql-format",
     SQL_COMPRESS = "sql-compress",
+    SEMI_SPLIT = "semi-split",
+    COMMA_SPLIT = "comma-split",
+    LINE_SPLIT = "line-split"
 }
