@@ -12,6 +12,7 @@ import { cspUnparse } from './csp-unparse';
 import { httpCacheAnalyze } from './http-cache-analyze';
 import { httpCorsAnalyze } from './http-cors-analyze';
 import { textSort } from './text-sort';
+import { commaSplit, lineSplit, semiSplit } from './split';
 
 type ToolFunction = (input: string) => string | Promise<string>;
 
@@ -31,15 +32,18 @@ export const methodMap: Record<EnumTools, ToolFunction> = {
   [EnumTools.BASE64_DECODE]: decodeBase64,
   [EnumTools.SQL_FORMAT]: sqlFormat,
   [EnumTools.SQL_COMPRESS]: sqlCompress,
+  [EnumTools.SEMI_SPLIT]: semiSplit,
+  [EnumTools.COMMA_SPLIT]: commaSplit,
+  [EnumTools.LINE_SPLIT]: lineSplit,
 };
 
 export async function processContent(input: string, type: EnumTools) {
   if (!methodMap[type]) {
     throw new Error(`Unsupported type: ${type}`);
   }
-  console.log('processContent', type)
-  let output = "";
-  let flag = "success";
+  console.log('processContent', type);
+  let output = '';
+  let flag = 'success';
   try {
     const result = methodMap[type](input);
     if (result instanceof Promise) {
@@ -48,9 +52,8 @@ export async function processContent(input: string, type: EnumTools) {
       output = result;
     }
   } catch (error) {
-    flag = "failure";
+    flag = 'failure';
     output = error instanceof Error ? error.message : '处理失败';
   }
   return [output, flag];
 }
-

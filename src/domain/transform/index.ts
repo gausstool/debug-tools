@@ -50,10 +50,34 @@ export const tools: ITool[] = [
   },
   {
     icon: '🔍',
+    label: 'Text 分号分割',
+    value: EnumTools.SEMI_SPLIT,
+    component: EditorDouble,
+    order: 6,
+    description: '使用分号;分割字符串',
+  },
+  {
+    icon: '🔍',
+    label: 'Text 逗号分割',
+    value: EnumTools.COMMA_SPLIT,
+    component: EditorDouble,
+    order: 6,
+    description: '使用逗号,分割字符串',
+  },
+  {
+    icon: '🔍',
+    label: 'Text 换行分割',
+    value: EnumTools.LINE_SPLIT,
+    component: EditorDouble,
+    order: 7,
+    description: '使用换行符分割字符串',
+  },
+  {
+    icon: '🔍',
     label: '正则表达式',
     value: EnumTools.REGEX_TEST,
     component: PageRegExp,
-    order: 5,
+    order: 99,
     description: '测试正则表达式对文本字符串的匹配情况',
   },
   {
@@ -135,6 +159,7 @@ export const tools: ITool[] = [
     order: 404,
     description: '解读 HTTP 跨域资源共享头，提取允许的来源',
   },
+
   {
     label: 'SQL 相关工具',
     value: '',

@@ -9,6 +9,7 @@
 - [x] TEXT 对比
 - [x] TEXT 排序
 - [x] TEXT 大小
+- [x] TEXT 分割
 - [x] URL 解析
 - [x] URL 编码
 - [x] URL 解码

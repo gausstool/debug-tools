@@ -82,6 +82,15 @@ ORDER BY
   created_at DESC 
 LIMIT 10;`;
 
+const codeSemiSplit = `localhost;127.*;10.*;192.168.*`
+const codeCommaSPlit = `a,b,c`;
+const codeLineSplit = `a
+b
+c
+d
+e
+f`;
+
 const route = useRoute();
 
 async function save() {
@@ -168,7 +177,13 @@ async function fetch() {
     defaultValue = codeSqlFormat;
   } else if (route.name == EnumTools.SQL_COMPRESS) {
     defaultValue = codeSqlCompress;
-  }
+  } else if (route.name == EnumTools.SEMI_SPLIT) {
+    defaultValue = codeSemiSplit;
+  } else if (route.name == EnumTools.COMMA_SPLIT) {
+    defaultValue = codeCommaSPlit;
+  } else if (route.name == EnumTools.LINE_SPLIT) {
+    defaultValue = codeLineSplit;
+  } 
 
   model1.value.setValue((value as string) || defaultValue);
   excute();
