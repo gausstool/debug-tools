@@ -1,18 +1,18 @@
 import { EnumTools } from '../types';
-import { sizeofByte } from './size-of-byte';
-import { urlParse } from './url-parse';
-import { encodeBase64 } from './base64';
-import { decodeBase64 } from './base64';
-import { sqlFormat } from './sql-format';
-import { sqlCompress } from './sql-compress';
-import { urlEncode } from './url';
-import { urlDecode } from './url';
-import { cspParse } from './csp-parse';
-import { cspUnparse } from './csp-unparse';
-import { httpCacheAnalyze } from './http-cache-analyze';
-import { httpCorsAnalyze } from './http-cors-analyze';
-import { textSort } from './text-sort';
-import { commaSplit, lineSplit, semiSplit } from './split';
+import { sizeofByte } from './text/size-of-byte';
+import { urlParse } from './url/url-parse';
+import { encodeBase64 } from './text/base64';
+import { decodeBase64 } from './text/base64';
+import { sqlFormat } from './sql/sql-format';
+import { sqlCompress } from './sql/sql-compress';
+import { urlEncode } from './url/url-encode';
+import { urlDecode } from './url/url-encode';
+import { cspParse } from './http/csp-parse';
+import { cspUnparse } from './http/csp-unparse';
+import { httpCacheAnalyze } from './http/http-cache-analyze';
+import { httpCorsAnalyze } from './http/http-cors-analyze';
+import { textSort } from './text/text-sort';
+import { commaSplit, lineSplit, semiSplit } from './text/text-split';
 
 type ToolFunction = (input: string) => string | Promise<string>;
 
