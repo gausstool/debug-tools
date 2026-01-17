@@ -1,8 +1,9 @@
 import { EnumTools } from './types';
-import PageRegExp from '@/views/PageRegExp.vue';
 import PageWelcome from '@/views/PageWelcome.vue';
 const EditorDiff = () => import('@/views/PageEditorDiff.vue');
 const EditorDouble = () => import('@/views/PageEditorDouble.vue');
+const PageNginxLog = () => import('@/views/PageNginxLog.vue');
+const PageRegExp = () => import('@/views/PageRegExp.vue');
 
 export interface ITool {
   icon?: string;
@@ -182,6 +183,14 @@ export const tools: ITool[] = [
     component: EditorDouble,
     order: 502,
     description: '格式化 SQL 语句，添加换行和缩进',
+  },
+  {
+    icon: '⛁',
+    label: 'Nginx 日志解析',
+    value: EnumTools.NGINX_LOG_PARSE,
+    component: PageNginxLog,
+    order: 503,
+    description: '解析 Nginx 日志文件，提取请求信息',
   },
 ].sort((a, b) => a.order - b.order);
 

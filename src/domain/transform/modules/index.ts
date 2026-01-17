@@ -13,6 +13,7 @@ import { httpCacheAnalyze } from './http/http-cache-analyze';
 import { httpCorsAnalyze } from './http/http-cors-analyze';
 import { textSort } from './text/text-sort';
 import { commaSplit, lineSplit, semiSplit } from './text/text-split';
+import { NginxLogParser } from './http/nginx-log-parse';
 
 type ToolFunction = (input: string) => string | Promise<string>;
 
@@ -35,6 +36,19 @@ export const methodMap: Record<EnumTools, ToolFunction> = {
   [EnumTools.SEMI_SPLIT]: semiSplit,
   [EnumTools.COMMA_SPLIT]: commaSplit,
   [EnumTools.LINE_SPLIT]: lineSplit,
+  [EnumTools.NGINX_LOG_PARSE]: (input: string) => {
+    // 常见的Nginx日志格式
+    const commonFormat = '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent"';
+    const parser = new NginxLogParser(commonFormat);
+    
+    const lines = input.split('\n').filter(line => line.trim());
+    const results = lines.map(line => {
+      const parsed = parser.parse(line);
+      return parsed ? parsed : { error: '无法解析日志行', line };
+    });
+    
+    return JSON.stringify(results, null, 2);
+  },
 };
 
 export async function processContent(input: string, type: EnumTools) {
