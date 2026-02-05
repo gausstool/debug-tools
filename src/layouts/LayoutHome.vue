@@ -66,6 +66,10 @@ const onRadioClick = async (tool: ITool) => {
 </style>
 
 <style lang="scss" scoped>
+.layout-home {
+  --layout-aside-width: 200px;
+}
+
 .home-container {
   width: 100%;
   height: 100%;
@@ -93,7 +97,7 @@ const onRadioClick = async (tool: ITool) => {
 }
 
 .menu-container {
-  width: 150px;
+  width: var(--layout-aside-width);
   height: 100%;
   .icon {
     display: inline-block;
@@ -103,6 +107,6 @@ const onRadioClick = async (tool: ITool) => {
 }
 .tool-container {
   height: 100%;
-  width: calc(100% - 150px);
+  width: calc(100% - var(--layout-aside-width));
 }
 </style>
