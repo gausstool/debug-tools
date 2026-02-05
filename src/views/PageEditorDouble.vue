@@ -38,10 +38,15 @@ const codeTextSort = `3. 按字典序排序
 2. 每行一个字符串
 `;
 
-const codeBase64Encode = `你好世界`;
-const codeBase64Decode = `5L2g5aW95LiW55WM`;
-const codeUrlEncode = `你好世界`;
-const codeUrlDecode = `%E4%BD%A0%E5%A5%BD%E4%B8%96%E7%95%8C`;
+const codeBase64Encode = `测试一下，你好世界 空格`;
+const codeBase64UrlSafeEncode = `测试一下，你好世界 空格`;
+const codeBase64Decode = `5rWL6K+V5LiA5LiL77yM5L2g5aW95LiW55WMIOepuuagvA==`;
+
+const codeUrlEncode = `http://example.com/?q=中文 测试`;
+const codeUrlDecode = `http://example.com/?q=%E4%B8%AD%E6%96%87%20%E6%B5%8B%E8%AF%95`;
+const codeUrlParamsEncode = `中文 测试`;
+const codeUrlParamsDecode = `%E4%B8%AD%E6%96%87%20%E6%B5%8B%E8%AF%95`;
+
 const codeCspParse = `Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' cdn.example.com; style-src 'self' fonts.example.com; img-src 'self' data: example.com; font-src 'self' data: fonts.example.com; form-action 'self'`;
 const codeCspUnparse = `{
   "default-src": ["'self'"],
@@ -159,12 +164,18 @@ async function fetch() {
     defaultValue = window.location.href;
   } else if (route.name == EnumTools.BASE64_ENCODE) {
     defaultValue = codeBase64Encode;
+  } else if (route.name == EnumTools.BASE64_URL_SAFE_ENCODE) {
+    defaultValue = codeBase64UrlSafeEncode;
   } else if (route.name == EnumTools.BASE64_DECODE) {
     defaultValue = codeBase64Decode;
   } else if (route.name == EnumTools.URL_ENCODE) {
     defaultValue = codeUrlEncode;
   } else if (route.name == EnumTools.URL_DECODE) {
     defaultValue = codeUrlDecode;
+  } else if (route.name == EnumTools.URL_COMPONENT_ENCODE) {
+    defaultValue = codeUrlParamsEncode;
+  } else if (route.name == EnumTools.URL_COMPONENT_DECODE) {
+    defaultValue = codeUrlParamsDecode;
   } else if (route.name == EnumTools.CSP_PARSE) {
     defaultValue = codeCspParse;
   } else if (route.name == EnumTools.CSP_UNPARSE) {

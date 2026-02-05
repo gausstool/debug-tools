@@ -6,6 +6,7 @@ import '@/styles/pages/welcome.css';
 import '@/styles/gauss-ui/g-desc.css';
 import '@/styles/gauss-ui/g-menu.css';
 import '@/styles/gauss-ui/g-divider.css';
+import 'element-plus/dist/index.css'
 import App from './App.vue';
 import router from './router';
 

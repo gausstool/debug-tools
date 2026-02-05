@@ -1,6 +1,6 @@
 {
   "name": "debug-tools",
-  "version": "1.2.0",
+  "version": "1.4.0",
   "author": "gausszhou",
   "scripts": {
     "dev": "vite --host",
@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "dayjs": "^1.11.7",
+    "element-plus": "^2.13.1",
     "js-base64": "^3.7.8",
     "localforage": "^1.10.0",
     "monaco-editor": "^0.38.0",

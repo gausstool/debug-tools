@@ -1,11 +1,11 @@
 import { EnumTools } from '../types';
 import { sizeofByte } from './text/size-of-byte';
 import { urlParse } from './url/url-parse';
-import { encodeBase64 } from './text/base64';
+import { encodeBase64, encodeBase64UrlSafe } from './text/base64';
 import { decodeBase64 } from './text/base64';
 import { sqlFormat } from './sql/sql-format';
 import { sqlCompress } from './sql/sql-compress';
-import { urlEncode } from './url/url-encode';
+import { urlEncode, urlParamsDecode, urlParamsEncode } from './url/url-encode';
 import { urlDecode } from './url/url-encode';
 import { cspParse } from './http/csp-parse';
 import { cspUnparse } from './http/csp-unparse';
@@ -13,6 +13,7 @@ import { httpCacheAnalyze } from './http/http-cache-analyze';
 import { httpCorsAnalyze } from './http/http-cors-analyze';
 import { textSort } from './text/text-sort';
 import { commaSplit, lineSplit, semiSplit } from './text/text-split';
+import { nginxLogParser } from './http/nginx-log-parse';
 
 type ToolFunction = (input: string) => string | Promise<string>;
 
@@ -24,17 +25,21 @@ export const methodMap: Record<EnumTools, ToolFunction> = {
   [EnumTools.URL_PARSE]: urlParse,
   [EnumTools.URL_ENCODE]: urlEncode,
   [EnumTools.URL_DECODE]: urlDecode,
+  [EnumTools.URL_COMPONENT_ENCODE]: urlParamsEncode,
+  [EnumTools.URL_COMPONENT_DECODE]: urlParamsDecode,
   [EnumTools.CSP_PARSE]: cspParse,
   [EnumTools.CSP_UNPARSE]: cspUnparse,
   [EnumTools.HTTP_CACHE_ANALYZE]: httpCacheAnalyze,
   [EnumTools.HTTP_CORS_ANALYZE]: httpCorsAnalyze,
   [EnumTools.BASE64_ENCODE]: encodeBase64,
+  [EnumTools.BASE64_URL_SAFE_ENCODE]: encodeBase64UrlSafe,
   [EnumTools.BASE64_DECODE]: decodeBase64,
   [EnumTools.SQL_FORMAT]: sqlFormat,
   [EnumTools.SQL_COMPRESS]: sqlCompress,
   [EnumTools.SEMI_SPLIT]: semiSplit,
   [EnumTools.COMMA_SPLIT]: commaSplit,
   [EnumTools.LINE_SPLIT]: lineSplit,
+  [EnumTools.NGINX_LOG_PARSE]: nginxLogParser,
 };
 
 export async function processContent(input: string, type: EnumTools) {

@@ -2,7 +2,9 @@
   <div class="page-regexp">
     <div class="regexp-container">
       <div class="regexp-input">
-        <input type="text" v-model="regExp" placeholder="请输入正则表达式" />
+        <span class="prefix">/</span>
+        <input class="input-element" type="text" v-model="regExp" placeholder="请输入正则表达式" />
+        <span class="suffix">/</span>
       </div>
       <div class="regexp-input">
         <textarea v-model="input" placeholder="请输入待匹配文本" rows="8"></textarea>
@@ -28,7 +30,7 @@
 <script lang="ts" setup>
 import { regexMatch } from '@/domain/transform/modules/text/regexp';
 import { ref, computed } from 'vue';
-const regExp = ref('(\\w+)(\\d+)');
+const regExp = ref('(\\w+)(\\d+)'); 
 const input = ref('abc123abc');
 const result = computed(() => regexMatch(regExp.value, input.value));
 </script>
@@ -50,6 +52,16 @@ const result = computed(() => regexMatch(regExp.value, input.value));
 .regexp-input {
   margin-bottom: 20px;
   display: flex;
+  align-items: center;
+  .prefix,
+  .suffix {
+    color: yellow;
+    font-size: 16px;
+    margin: 0 5px;
+  }
+  .input-element {
+    color: yellow;
+  }
   input,
   textarea {
     width: 100%;

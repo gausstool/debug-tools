@@ -1,8 +1,9 @@
 import { EnumTools } from './types';
-import PageRegExp from '@/views/PageRegExp.vue';
 import PageWelcome from '@/views/PageWelcome.vue';
 const EditorDiff = () => import('@/views/PageEditorDiff.vue');
 const EditorDouble = () => import('@/views/PageEditorDouble.vue');
+const PageNginxLog = () => import('@/views/PageNginxLog.vue');
+const PageRegExp = () => import('@/views/PageRegExp.vue');
 
 export interface ITool {
   icon?: string;
@@ -105,6 +106,22 @@ export const tools: ITool[] = [
     description: '对 URL 字符串进行解码，恢复特殊字符',
   },
   {
+    icon: '🌍',
+    label: 'URL 参数编码',
+    value: EnumTools.URL_COMPONENT_ENCODE,
+    component: EditorDouble,
+    order: 104,
+    description: '对 URL 参数字符串进行编码，替换特殊字符',
+  },
+  {
+    icon: '🌎',
+    label: 'URL 参数解码',
+    value: EnumTools.URL_COMPONENT_DECODE,
+    component: EditorDouble,
+    order: 105,
+    description: '对 URL 参数字符串进行解码，恢复特殊字符',
+  },
+  {
     icon: '🔡',
     label: 'Base64 编码',
     value: EnumTools.BASE64_ENCODE,
@@ -113,11 +130,19 @@ export const tools: ITool[] = [
     description: '对文本字符串进行 Base64 编码',
   },
   {
+    icon: '🔡',
+    label: 'Base64 URL Safe 编码',
+    value: EnumTools.BASE64_URL_SAFE_ENCODE,
+    component: EditorDouble,
+    order: 202,
+    description: '对文本字符串进行 Base64 URL Safe 编码',
+  },
+  {
     icon: '🔠',
     label: 'Base64 解码',
     value: EnumTools.BASE64_DECODE,
     component: EditorDouble,
-    order: 202,
+    order: 203,
     description: '对 Base64 编码的字符串进行解码',
   },
   {
@@ -182,6 +207,14 @@ export const tools: ITool[] = [
     component: EditorDouble,
     order: 502,
     description: '格式化 SQL 语句，添加换行和缩进',
+  },
+  {
+    icon: '⛁',
+    label: 'Nginx 日志解析',
+    value: EnumTools.NGINX_LOG_PARSE,
+    component: PageNginxLog,
+    order: 503,
+    description: '解析 Nginx 日志文件，提取请求信息',
   },
 ].sort((a, b) => a.order - b.order);
 
