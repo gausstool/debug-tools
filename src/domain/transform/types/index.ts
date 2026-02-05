@@ -6,6 +6,8 @@ export enum EnumTools {
     URL_PARSE = "url-parse",
     URL_ENCODE = "url-encode",
     URL_DECODE = "url-decode",
+    URL_COMPONENT_ENCODE = "url-component-encode",
+    URL_COMPONENT_DECODE = "url-component-decode",
     CSP_PARSE = "csp-parse",
     CSP_UNPARSE = "csp-unparse",
     HTTP_CACHE_ANALYZE = "http-cache-analyze",

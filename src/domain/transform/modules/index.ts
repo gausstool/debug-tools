@@ -5,7 +5,7 @@ import { encodeBase64, encodeBase64UrlSafe } from './text/base64';
 import { decodeBase64 } from './text/base64';
 import { sqlFormat } from './sql/sql-format';
 import { sqlCompress } from './sql/sql-compress';
-import { urlEncode } from './url/url-encode';
+import { urlEncode, urlParamsDecode, urlParamsEncode } from './url/url-encode';
 import { urlDecode } from './url/url-encode';
 import { cspParse } from './http/csp-parse';
 import { cspUnparse } from './http/csp-unparse';
@@ -25,6 +25,8 @@ export const methodMap: Record<EnumTools, ToolFunction> = {
   [EnumTools.URL_PARSE]: urlParse,
   [EnumTools.URL_ENCODE]: urlEncode,
   [EnumTools.URL_DECODE]: urlDecode,
+  [EnumTools.URL_COMPONENT_ENCODE]: urlParamsEncode,
+  [EnumTools.URL_COMPONENT_DECODE]: urlParamsDecode,
   [EnumTools.CSP_PARSE]: cspParse,
   [EnumTools.CSP_UNPARSE]: cspUnparse,
   [EnumTools.HTTP_CACHE_ANALYZE]: httpCacheAnalyze,

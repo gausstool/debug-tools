@@ -105,6 +105,22 @@ export const tools: ITool[] = [
     order: 103,
     description: '对 URL 字符串进行解码，恢复特殊字符',
   },
+    {
+    icon: '🌍',
+    label: 'URL 参数编码',
+    value: EnumTools.URL_COMPONENT_ENCODE,
+    component: EditorDouble,
+    order: 104,
+    description: '对 URL 参数字符串进行编码，替换特殊字符',
+  },
+  {
+    icon: '🌎',
+    label: 'URL 参数解码',
+    value: EnumTools.URL_COMPONENT_DECODE,
+    component: EditorDouble,
+    order: 105,
+    description: '对 URL 参数字符串进行解码，恢复特殊字符',
+  },
   {
     icon: '🔡',
     label: 'Base64 编码',
