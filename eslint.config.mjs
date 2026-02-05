@@ -19,6 +19,7 @@ export default defineConfig([
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-require-imports': 'off',
       'no-useless-escape': 'off',
+      'indent': ['warn', 2],
     }
   }
 ]);

@@ -105,7 +105,7 @@ export const tools: ITool[] = [
     order: 103,
     description: '对 URL 字符串进行解码，恢复特殊字符',
   },
-    {
+  {
     icon: '🌍',
     label: 'URL 参数编码',
     value: EnumTools.URL_COMPONENT_ENCODE,
@@ -129,7 +129,7 @@ export const tools: ITool[] = [
     order: 201,
     description: '对文本字符串进行 Base64 编码',
   },
-    {
+  {
     icon: '🔡',
     label: 'Base64 URL Safe 编码',
     value: EnumTools.BASE64_URL_SAFE_ENCODE,
