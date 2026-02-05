@@ -113,12 +113,20 @@ export const tools: ITool[] = [
     order: 201,
     description: '对文本字符串进行 Base64 编码',
   },
+    {
+    icon: '🔡',
+    label: 'Base64 URL Safe 编码',
+    value: EnumTools.BASE64_URL_SAFE_ENCODE,
+    component: EditorDouble,
+    order: 202,
+    description: '对文本字符串进行 Base64 URL Safe 编码',
+  },
   {
     icon: '🔠',
     label: 'Base64 解码',
     value: EnumTools.BASE64_DECODE,
     component: EditorDouble,
-    order: 202,
+    order: 203,
     description: '对 Base64 编码的字符串进行解码',
   },
   {

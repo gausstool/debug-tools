@@ -11,6 +11,7 @@ export enum EnumTools {
     HTTP_CACHE_ANALYZE = "http-cache-analyze",
     HTTP_CORS_ANALYZE = "http-cors-analyze",
     BASE64_ENCODE = "base64-encode",
+    BASE64_URL_SAFE_ENCODE = "base64-url-safe-encode",
     BASE64_DECODE = "base64-decode",
     SQL_FORMAT = "sql-format",
     SQL_COMPRESS = "sql-compress",

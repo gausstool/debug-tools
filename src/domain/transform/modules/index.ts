@@ -1,7 +1,7 @@
 import { EnumTools } from '../types';
 import { sizeofByte } from './text/size-of-byte';
 import { urlParse } from './url/url-parse';
-import { encodeBase64 } from './text/base64';
+import { encodeBase64, encodeBase64UrlSafe } from './text/base64';
 import { decodeBase64 } from './text/base64';
 import { sqlFormat } from './sql/sql-format';
 import { sqlCompress } from './sql/sql-compress';
@@ -13,7 +13,7 @@ import { httpCacheAnalyze } from './http/http-cache-analyze';
 import { httpCorsAnalyze } from './http/http-cors-analyze';
 import { textSort } from './text/text-sort';
 import { commaSplit, lineSplit, semiSplit } from './text/text-split';
-import { NginxLogParser } from './http/nginx-log-parse';
+import { nginxLogParser } from './http/nginx-log-parse';
 
 type ToolFunction = (input: string) => string | Promise<string>;
 
@@ -30,25 +30,14 @@ export const methodMap: Record<EnumTools, ToolFunction> = {
   [EnumTools.HTTP_CACHE_ANALYZE]: httpCacheAnalyze,
   [EnumTools.HTTP_CORS_ANALYZE]: httpCorsAnalyze,
   [EnumTools.BASE64_ENCODE]: encodeBase64,
+  [EnumTools.BASE64_URL_SAFE_ENCODE]: encodeBase64UrlSafe,
   [EnumTools.BASE64_DECODE]: decodeBase64,
   [EnumTools.SQL_FORMAT]: sqlFormat,
   [EnumTools.SQL_COMPRESS]: sqlCompress,
   [EnumTools.SEMI_SPLIT]: semiSplit,
   [EnumTools.COMMA_SPLIT]: commaSplit,
   [EnumTools.LINE_SPLIT]: lineSplit,
-  [EnumTools.NGINX_LOG_PARSE]: (input: string) => {
-    // 常见的Nginx日志格式
-    const commonFormat = '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent"';
-    const parser = new NginxLogParser(commonFormat);
-    
-    const lines = input.split('\n').filter(line => line.trim());
-    const results = lines.map(line => {
-      const parsed = parser.parse(line);
-      return parsed ? parsed : { error: '无法解析日志行', line };
-    });
-    
-    return JSON.stringify(results, null, 2);
-  },
+  [EnumTools.NGINX_LOG_PARSE]: nginxLogParser,
 };
 
 export async function processContent(input: string, type: EnumTools) {
