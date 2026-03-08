@@ -21,4 +21,5 @@ export enum EnumTools {
     COMMA_SPLIT = "comma-split",
     LINE_SPLIT = "line-split",
     NGINX_LOG_PARSE = "nginx-log-parse",
+    RANDOM_PASSWORD = "random-password",
 }

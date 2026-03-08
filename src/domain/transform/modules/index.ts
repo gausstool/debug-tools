@@ -14,6 +14,7 @@ import { httpCorsAnalyze } from './http/http-cors-analyze';
 import { textSort } from './text/text-sort';
 import { commaSplit, lineSplit, semiSplit } from './text/text-split';
 import { nginxLogParser } from './http/nginx-log-parse';
+import { randomPassword } from './random/random-password';
 
 type ToolFunction = (input: string) => string | Promise<string>;
 
@@ -40,6 +41,7 @@ export const methodMap: Record<EnumTools, ToolFunction> = {
   [EnumTools.COMMA_SPLIT]: commaSplit,
   [EnumTools.LINE_SPLIT]: lineSplit,
   [EnumTools.NGINX_LOG_PARSE]: nginxLogParser,
+  [EnumTools.RANDOM_PASSWORD]: randomPassword,
 };
 
 export async function processContent(input: string, type: EnumTools) {

@@ -4,6 +4,7 @@ const EditorDiff = () => import('@/views/PageEditorDiff.vue');
 const EditorDouble = () => import('@/views/PageEditorDouble.vue');
 const PageNginxLog = () => import('@/views/PageNginxLog.vue');
 const PageRegExp = () => import('@/views/PageRegExp.vue');
+const PageRandomPassword = () => import('@/views/PageRandomPassword.vue');
 
 export interface ITool {
   icon?: string;
@@ -215,6 +216,15 @@ export const tools: ITool[] = [
     component: PageNginxLog,
     order: 503,
     description: '解析 Nginx 日志文件，提取请求信息',
+  },
+  // 随机工具
+  {
+    icon: '🎲',
+    label: '随机数生成',
+    value: EnumTools.RANDOM_PASSWORD,
+    component: PageRandomPassword,
+    order: 600,
+    description: '生成指定范围内的随机整数',
   },
 ].sort((a, b) => a.order - b.order);
 

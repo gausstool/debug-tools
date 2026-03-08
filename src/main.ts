@@ -3,9 +3,10 @@ import { createPinia } from 'pinia';
 import '@/styles/index.css';
 import '@/styles/app.css';
 import '@/styles/pages/welcome.css';
+import '@/styles/gauss-ui/g-button.css';
 import '@/styles/gauss-ui/g-desc.css';
-import '@/styles/gauss-ui/g-menu.css';
 import '@/styles/gauss-ui/g-divider.css';
+import '@/styles/gauss-ui/g-menu.css';
 import 'element-plus/dist/index.css'
 import App from './App.vue';
 import router from './router';
