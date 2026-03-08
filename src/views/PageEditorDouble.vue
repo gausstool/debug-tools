@@ -96,6 +96,20 @@ d
 e
 f`;
 
+const codeSrt = `1
+00:00:01,000 --> 00:00:04,000
+Hello world，这是第一行
+这是同一字幕的第二行
+
+2
+00:00:05,000 --> 00:00:08,000
+第二段字幕
+包含两行内容
+
+3
+00:00:10,000 --> 00:00:12,500
+最后一段`;
+
 const route = useRoute();
 
 async function save() {
@@ -194,6 +208,8 @@ async function fetch() {
     defaultValue = codeCommaSPlit;
   } else if (route.name == EnumTools.LINE_SPLIT) {
     defaultValue = codeLineSplit;
+  } else if (route.name == EnumTools.TEXT_SRT_PLAIN) {
+    defaultValue = codeSrt;
   } 
 
   model1.value.setValue((value as string) || defaultValue);

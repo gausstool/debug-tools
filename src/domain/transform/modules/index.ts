@@ -15,8 +15,9 @@ import { textSort } from './text/text-sort';
 import { commaSplit, lineSplit, semiSplit } from './text/text-split';
 import { nginxLogParser } from './http/nginx-log-parse';
 import { randomPassword } from './random/random-password';
+import { srtToPlainText } from './text/srt';
 
-type ToolFunction = (input: string) => string | Promise<string>;
+type ToolFunction = (input: any) => string | Promise<string>;
 
 export const methodMap: Record<EnumTools, ToolFunction> = {
   [EnumTools.TEXT_DIFF]: (input: string) => input, // Placeholder for text diff function
@@ -42,6 +43,7 @@ export const methodMap: Record<EnumTools, ToolFunction> = {
   [EnumTools.LINE_SPLIT]: lineSplit,
   [EnumTools.NGINX_LOG_PARSE]: nginxLogParser,
   [EnumTools.RANDOM_PASSWORD]: randomPassword,
+  [EnumTools.TEXT_SRT_PLAIN]: srtToPlainText,
 };
 
 export async function processContent(input: string, type: EnumTools) {

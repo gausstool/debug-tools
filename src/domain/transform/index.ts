@@ -75,6 +75,14 @@ export const tools: ITool[] = [
     description: '使用换行符分割字符串',
   },
   {
+    icon: '🎲',
+    label: 'SRT 字幕转换',
+    value: EnumTools.TEXT_SRT_PLAIN,
+    component: EditorDouble,
+    order: 8,
+    description: '将 SRT 字幕内容转换为纯文本',
+  },
+  {
     icon: '🔍',
     label: '正则表达式',
     value: EnumTools.REGEX_TEST,
@@ -209,23 +217,26 @@ export const tools: ITool[] = [
     order: 502,
     description: '格式化 SQL 语句，添加换行和缩进',
   },
+
   {
     icon: '⛁',
     label: 'Nginx 日志解析',
     value: EnumTools.NGINX_LOG_PARSE,
     component: PageNginxLog,
-    order: 503,
+    order: 600,
     description: '解析 Nginx 日志文件，提取请求信息',
   },
   // 随机工具
   {
     icon: '🎲',
-    label: '随机数生成',
+    label: '随机密码生成',
     value: EnumTools.RANDOM_PASSWORD,
     component: PageRandomPassword,
-    order: 600,
-    description: '生成指定范围内的随机整数',
+    order: 601,
+    description: '生成指定长度的随机密码',
   },
+
+
 ].sort((a, b) => a.order - b.order);
 
 // 导出默认路由配置
