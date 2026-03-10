@@ -10,7 +10,7 @@
           accept=".log"
           @change="onFileChange"
         />
-        <button class="button" @click="onClick">选择文件</button>
+        <button class="g-button" @click="onClick">选择文件</button>
       </div>
       <div class="nginx-log-parser-result" v-if="tableData.length">
         <div class="table-content">
@@ -108,17 +108,7 @@ const readFile = (file: File) => {
   padding: 20px;
   height: 100%;
   background-color: #272727;
-  .button {
-    border: 1px solid #424242;
-    border-radius: 2px;
-    background-color: #424242;
-    padding: 4px 8px;
-    color: #fff;
-    cursor: pointer;
-  }
-  .button:hover {
-    background-color: #484848;
-  }
+
 }
 
 .nginx-log-parser-result {

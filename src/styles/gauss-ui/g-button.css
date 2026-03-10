@@ -1,0 +1,11 @@
+.g-button {
+  border: 1px solid #424242;
+  border-radius: 2px;
+  background-color: #424242;
+  padding: 4px 8px;
+  color: #fff;
+  cursor: pointer;
+}
+.g-button:hover {
+  background-color: #484848;
+}
