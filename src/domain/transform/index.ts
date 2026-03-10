@@ -5,6 +5,7 @@ const EditorDouble = () => import('@/views/PageEditorDouble.vue');
 const PageNginxLog = () => import('@/views/PageNginxLog.vue');
 const PageRegExp = () => import('@/views/PageRegExp.vue');
 const PageRandomPassword = () => import('@/views/PageRandomPassword.vue');
+const PageRandomPort = () => import('@/views/PageRandomPort.vue');
 
 export interface ITool {
   icon?: string;
@@ -234,6 +235,14 @@ export const tools: ITool[] = [
     component: PageRandomPassword,
     order: 601,
     description: '生成指定长度的随机密码',
+  },
+  {
+    icon: '🔌',
+    label: '随机端口生成',
+    value: EnumTools.RANDOM_PORT,
+    component: PageRandomPort,
+    order: 602,
+    description: '根据输入字符串和端口范围生成随机端口',
   },
 
 

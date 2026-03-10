@@ -16,6 +16,7 @@ import { commaSplit, lineSplit, semiSplit } from './text/text-split';
 import { nginxLogParser } from './http/nginx-log-parse';
 import { randomPassword } from './random/random-password';
 import { srtToPlainText } from './text/srt';
+import { randomPortString } from './random/random-port';
 
 type ToolFunction = (input: any) => string | Promise<string>;
 
@@ -44,6 +45,7 @@ export const methodMap: Record<EnumTools, ToolFunction> = {
   [EnumTools.NGINX_LOG_PARSE]: nginxLogParser,
   [EnumTools.RANDOM_PASSWORD]: randomPassword,
   [EnumTools.TEXT_SRT_PLAIN]: srtToPlainText,
+  [EnumTools.RANDOM_PORT]: randomPortString,
 };
 
 export async function processContent(input: string, type: EnumTools) {
