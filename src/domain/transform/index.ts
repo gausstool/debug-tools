@@ -230,11 +230,11 @@ export const tools: ITool[] = [
   // 随机工具
   {
     icon: '🎲',
-    label: '随机密码生成',
+    label: '随机字符生成',
     value: EnumTools.RANDOM_PASSWORD,
     component: PageRandomPassword,
     order: 601,
-    description: '生成指定长度的随机密码',
+    description: '生成指定长度和字符范围的随机字符串',
   },
   {
     icon: '🔌',

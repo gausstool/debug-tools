@@ -2,7 +2,7 @@
   <div class="page-layout">
     <div class="page-container">
       <div class="form-item">
-        <label>输入字符串（可选）</label>
+        <label>随机种子</label>
         <input type="text" v-model="inputString" placeholder="输入任意字符串作为随机种子" />
       </div>
       <div class="form-item">
@@ -14,8 +14,15 @@
         <input type="number" v-model="maxPort" min="1" max="65535" />
       </div>
       <div class="form-item">
-        <label>生成的端口</label>
-        <input type="text" v-model="generatedPort" readonly />
+        <label>生成结果</label>
+        <input 
+          type="text" 
+          v-model="generatedPort" 
+          readonly 
+          @click="copyToClipboard"
+          :title="generatedPort ? '点击复制到剪贴板' : ''"
+          :class="{ 'clickable': generatedPort }"
+        />
       </div>
       <div>
         <button class="g-button" @click="generatePort">生成端口</button>
@@ -48,6 +55,29 @@ function resetForm() {
   minPort.value = 1025;
   maxPort.value = 65535;
   generatedPort.value = '';
+}
+
+async function copyToClipboard() {
+  if (!generatedPort.value) return;
+  
+  try {
+    await navigator.clipboard.writeText(generatedPort.value);
+  } catch {
+    const textArea = document.createElement('textarea');
+    textArea.value = generatedPort.value;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+    } catch (err) {
+      console.error('复制失败:', err);
+    }
+    document.body.removeChild(textArea);
+  }
 }
 </script>
 
@@ -93,17 +123,21 @@ function resetForm() {
   color: #888888;
 }
 
+.form-item input.clickable {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.form-item input.clickable:hover {
+  background-color: #3a3a3a;
+}
+
 .g-button {
-  background-color: #007acc;
   color: white;
   border: none;
   padding: 8px 16px;
   border-radius: 3px;
   cursor: pointer;
   margin-right: 10px;
-}
-
-.g-button:hover {
-  background-color: #005a9e;
 }
 </style>
