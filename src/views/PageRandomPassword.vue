@@ -204,11 +204,6 @@ async function copyToClipboard() {
 }
 
 .g-button {
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 3px;
-  cursor: pointer;
   margin-right: 10px;
 }
 </style>

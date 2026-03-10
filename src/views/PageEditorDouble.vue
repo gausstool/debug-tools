@@ -202,11 +202,11 @@ async function fetch() {
     defaultValue = codeSqlFormat;
   } else if (route.name == EnumTools.SQL_COMPRESS) {
     defaultValue = codeSqlCompress;
-  } else if (route.name == EnumTools.SEMI_SPLIT) {
+  } else if (route.name == EnumTools.TEXT_SPLIT_BY_SEMI) {
     defaultValue = codeSemiSplit;
-  } else if (route.name == EnumTools.COMMA_SPLIT) {
+  } else if (route.name == EnumTools.TEXT_SPLIT_BY_COMMA) {
     defaultValue = codeCommaSPlit;
-  } else if (route.name == EnumTools.LINE_SPLIT) {
+  } else if (route.name == EnumTools.TEXT_SPLIT_BY_LINE) {
     defaultValue = codeLineSplit;
   } else if (route.name == EnumTools.TEXT_SRT_PLAIN) {
     defaultValue = codeSrt;

@@ -52,27 +52,34 @@ export const tools: ITool[] = [
     description: '计算文本字符串的字节大小',
   },
   {
+    label: '文本 相关工具',
+    value: '',
+    component: EditorDouble,
+    order: 10,
+    space: true,
+  },
+  {
     icon: '🔍',
     label: 'Text 分号分割',
-    value: EnumTools.SEMI_SPLIT,
+    value: EnumTools.TEXT_SPLIT_BY_SEMI,
     component: EditorDouble,
-    order: 6,
+    order: 11,
     description: '使用分号;分割字符串',
   },
   {
     icon: '🔍',
     label: 'Text 逗号分割',
-    value: EnumTools.COMMA_SPLIT,
+    value: EnumTools.TEXT_SPLIT_BY_COMMA,
     component: EditorDouble,
-    order: 6,
+    order: 12,
     description: '使用逗号,分割字符串',
   },
   {
     icon: '🔍',
     label: 'Text 换行分割',
-    value: EnumTools.LINE_SPLIT,
+    value: EnumTools.TEXT_SPLIT_BY_LINE,
     component: EditorDouble,
-    order: 7,
+    order: 13,
     description: '使用换行符分割字符串',
   },
   {
@@ -80,16 +87,16 @@ export const tools: ITool[] = [
     label: 'SRT 字幕转换',
     value: EnumTools.TEXT_SRT_PLAIN,
     component: EditorDouble,
-    order: 8,
+    order: 14,
     description: '将 SRT 字幕内容转换为纯文本',
   },
+  // URL 相关工具
   {
-    icon: '🔍',
-    label: '正则表达式',
-    value: EnumTools.REGEX_TEST,
-    component: PageRegExp,
-    order: 99,
-    description: '测试正则表达式对文本字符串的匹配情况',
+    label: '文本 相关工具',
+    value: '',
+    component: EditorDouble,
+    order: 100,
+    space: true,
   },
   {
     icon: '🔗',
@@ -130,6 +137,13 @@ export const tools: ITool[] = [
     component: EditorDouble,
     order: 105,
     description: '对 URL 参数字符串进行解码，恢复特殊字符',
+  },
+  {
+    label: '文本 相关工具',
+    value: '',
+    component: EditorDouble,
+    order: 200,
+    space: true,
   },
   {
     icon: '🔡',
@@ -194,7 +208,6 @@ export const tools: ITool[] = [
     order: 404,
     description: '解读 HTTP 跨域资源共享头，提取允许的来源',
   },
-
   {
     label: 'SQL 相关工具',
     value: '',
@@ -218,22 +231,35 @@ export const tools: ITool[] = [
     order: 502,
     description: '格式化 SQL 语句，添加换行和缩进',
   },
-
+  {
+    label: '随机工具',
+    value: '',
+    component: EditorDouble,
+    order: 600,
+    space: true,
+  },
   {
     icon: '⛁',
     label: 'Nginx 日志解析',
     value: EnumTools.NGINX_LOG_PARSE,
     component: PageNginxLog,
-    order: 600,
+    order: 601,
     description: '解析 Nginx 日志文件，提取请求信息',
   },
   // 随机工具
+  {
+    label: '随机工具',
+    value: '',
+    component: EditorDouble,
+    order: 700,
+    space: true,
+  },
   {
     icon: '🎲',
     label: '随机字符生成',
     value: EnumTools.RANDOM_PASSWORD,
     component: PageRandomPassword,
-    order: 601,
+    order: 701,
     description: '生成指定长度和字符范围的随机字符串',
   },
   {
@@ -241,11 +267,24 @@ export const tools: ITool[] = [
     label: '随机端口生成',
     value: EnumTools.RANDOM_PORT,
     component: PageRandomPort,
-    order: 602,
+    order: 702,
     description: '根据输入字符串和端口范围生成随机端口',
   },
-
-
+  {
+    label: '随机工具',
+    value: '',
+    component: EditorDouble,
+    order: 800,
+    space: true,
+  },
+  {
+    icon: '🔍',
+    label: '正则表达式',
+    value: EnumTools.REGEX_TEST,
+    component: PageRegExp,
+    order: 801,
+    description: '测试正则表达式对文本字符串的匹配情况',
+  },
 ].sort((a, b) => a.order - b.order);
 
 // 导出默认路由配置
