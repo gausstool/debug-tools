@@ -4,7 +4,7 @@
     <div class="welcome-header">
       <div class="welcome-title">
         <h1>调试工具箱</h1>
-        <p class="subtitle">文本、URL、SQL、HTTP 等常用调试工具</p>
+        <p class="subtitle">我的常用调试工具</p>
       </div>
     </div>
     <!-- 主要内容区域 -->
