@@ -1,25 +1,17 @@
 <template>
   <div class="page-editor-diff" id="editor-diff">
     <div ref="editor1Container" class="container"></div>
+    <div ref="editor2Container" class="container"></div>
   </div>
 </template>
 
 <script setup lang="ts">
 import localforage from 'localforage';
-import { onMounted, onUnmounted, ref, shallowRef } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import {
-  addCommandSave,
-  createEditorDiff,
-  createEditorModel,
-} from '@/domain/editor/editor';
-import { EditorManager } from '@/domain/editor/editor-manager';
-
-// 使用ref来存储编辑器实例
-const editor1Container = ref<HTMLDivElement>();
-const editor1 = shallowRef<any>(null);
-const model1 = shallowRef<any>(null);
-const model2 = shallowRef<any>(null);
+import { EditorView } from '@codemirror/view';
+import { addCommandSave, createEditorInstance, createEditorState } from '@/domain/editor/codemirror-editor';
+import { EditorManager } from '@/domain/editor/codemirror-editor-manager';
 
 const code1Default = `// 粘贴需要进行比对的代码
 void main() {
@@ -32,47 +24,48 @@ function main() {
   console.log("Hello World!"); 
 }
 `;
+
+// 使用ref来存储编辑器实例
+const editor1Container = ref<HTMLDivElement>();
+const editor2Container = ref<HTMLDivElement>();
+let editor1: EditorView | null = null;
+let editor2: EditorView | null = null;
+let currentLanguage1 = 'javascript';
+let currentLanguage2 = 'javascript';
+
 const route = useRoute();
 
-async function initEditors() {
-  if (!editor1Container.value) {
-    return;
-  }
-  // 异步创建编辑器模型和实例
-  model1.value = await createEditorModel('', 'javascript');
-  model2.value = await createEditorModel('', 'javascript');
-  
-  editor1.value = await createEditorDiff(editor1Container.value);
-  
-  editor1.value.setModel({
-    original: model1.value,
-    modified: model2.value,
-  });
-  
-  // 添加保存命令
-  await addCommandSave(editor1.value, async () => {
-    await save();
-  });
-  // 添加编辑器到管理列表
-  EditorManager.addEditor(editor1.value);
-}
-
 async function save() {
-  const code1 = model1.value.getValue();
-  const code2 = model2.value.getValue();
+  const code1 = editor1 ? editor1.state.doc.toString() : '';
+  const code2 = editor2 ? editor2.state.doc.toString() : '';
   await localforage.setItem(`debug-tools-${String(route.name)}`, { code1, code2 });
 }
 
 async function fetch() {
   const value: any = await localforage.getItem(`debug-tools-${String(route.name)}`);
   const { code1 = '', code2 = '' } = value || {};
-  model1.value.setValue(code1 || code1Default);
-  model2.value.setValue(code2 || code2Default);
+  if (editor1) {
+    const newState = await createEditorState(code1 || code1Default, currentLanguage1);
+    editor1.setState(newState)
+  }
+  if (editor2) {
+    const newState = await createEditorState(code2 || code2Default, currentLanguage2);
+    editor2.setState(newState)
+  }
 }
 
 onMounted(async () => {
-  await initEditors();
+  const state1 = await createEditorState('', currentLanguage1);
+  const state2 = await createEditorState('', currentLanguage2);
+  if (!editor1Container.value || !editor2Container.value) return;
+  editor1 = createEditorInstance(editor1Container.value, state1);
+  editor2 = createEditorInstance(editor2Container.value, state2);
+  EditorManager.addEditor(editor1);
+  EditorManager.addEditor(editor2);
   await fetch();
+  addCommandSave(editor1, async () => {
+    save();
+  });
 });
 
 onUnmounted(() => {

@@ -7,20 +7,13 @@
 
 <script lang="ts" setup>
 import localforage from 'localforage';
-import { onMounted, onUnmounted, watch, ref, shallowRef } from 'vue';
+import { onMounted, onUnmounted, watch, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { addCommandSave, createEditorInstance, createEditorModel } from '@/domain/editor/editor';
+import { addCommandSave, createEditorInstance, createEditorState } from '@/domain/editor/codemirror-editor';
+import { EditorManager } from '@/domain/editor/codemirror-editor-manager';
 import { processContent } from '@/domain/transform/modules';
 import { EnumTools } from '@/domain/transform/types';
-import { EditorManager } from '@/domain/editor/editor-manager';
-
-// 使用ref来存储编辑器实例
-const editor1Container = ref<HTMLDivElement>();
-const editor2Container = ref<HTMLDivElement>();
-const editor1 = shallowRef<any>(null);
-const editor2 = shallowRef<any>(null);
-const model1 = shallowRef<any>(null);
-const model2 = shallowRef<any>(null);
+import { EditorView } from '@codemirror/view';
 
 const codeSize = `计算字符串所占的内存字节数，
 使用 UTF-8 和 UTF-16 的编码方式计算。
@@ -110,70 +103,44 @@ Hello world，这是第一行
 00:00:10,000 --> 00:00:12,500
 最后一段`;
 
+// 使用ref来存储编辑器实例
+const editor1Container = ref<HTMLDivElement>();
+const editor2Container = ref<HTMLDivElement>();
+
+let editor1: EditorView | null = null;
+let editor2: EditorView | null = null;
+let currentLanguage1 = 'javascript';
+let currentLanguage2 = 'javascript';
+
 const route = useRoute();
 
 async function save() {
-  const code1 = model1.value.getValue();
+  const code1 = editor1? editor1.state.doc.toString() : '';
   const key = `debug-tools-${String(route.name)}`;
   await localforage.setItem(key, code1);
 }
 
-async function initEditors() {
-  if (!editor1Container.value || !editor2Container.value) {
-    return;
-  }
-  // 异步创建编辑器模型和实例
-  model1.value = await createEditorModel('', 'javascript');
-  model2.value = await createEditorModel('', 'javascript');
-  editor1.value = await createEditorInstance(editor1Container.value, model1.value);
-  editor2.value = await createEditorInstance(editor2Container.value, model2.value, { readOnly: true }); // 第二个编辑器为只读
-
-  // 添加保存命令
-  await addCommandSave(editor1.value, async () => {
-    await save();
-  });
-
-  // 设置内容变化监听器
-  editor1.value.onDidChangeModelContent(() => {
-    excute();
-  });
-
-  // 添加编辑器到管理列表
-  EditorManager.addEditor(editor1.value);
-  EditorManager.addEditor(editor2.value);
-}
-
 async function fetch() {
   const key = `code-tools-${String(route.name)}`;
-  const value = await localforage.getItem(key);
-  // 根据路由类型设置模型语言
-  let model1Language = 'javascript';
-  let model2Language = 'javascript';
+  const value = await localforage.getItem(key) as string;
 
   if (route.name == EnumTools.SQL_FORMAT || route.name == EnumTools.SQL_COMPRESS) {
-    model1Language = 'sql';
-    model2Language = 'sql';
+    currentLanguage1 = 'sql';
+    currentLanguage2 = 'sql';
   } else if (route.name == EnumTools.TEXT_SIZE) {
-    model1Language = 'text';
-    model2Language = 'javascript';
+    currentLanguage1 = 'text';
+    currentLanguage2 = 'javascript';
   } else if (route.name == EnumTools.TEXT_SORT) {
-    model1Language = 'text';
-    model2Language = 'text';
+    currentLanguage1 = 'text';
+    currentLanguage2 = 'text';
   }
-
-  // 重新创建模型
-  model1.value = await createEditorModel('', model1Language);
-  model2.value = await createEditorModel('', model2Language);
-
-  editor1.value.setModel(model1.value);
-  editor2.value.setModel(model2.value);
 
   // 设置默认值
   let defaultValue = '';
   if (route.name == EnumTools.TEXT_SIZE) {
-    defaultValue = codeSize;
+    defaultValue = value || codeSize;
   } else if (route.name == EnumTools.TEXT_SORT) {
-    defaultValue = codeTextSort;
+    defaultValue = value || codeTextSort;
   } else if (route.name == EnumTools.URL_PARSE) {
     defaultValue = window.location.href;
   } else if (route.name == EnumTools.BASE64_ENCODE) {
@@ -212,31 +179,45 @@ async function fetch() {
     defaultValue = codeSrt;
   } 
 
-  model1.value.setValue((value as string) || defaultValue);
-  excute();
+  if (editor1) {
+    const newState = await createEditorState(defaultValue, currentLanguage1, { onchange: excute});
+    editor1.setState(newState)
+  }
 }
 
 async function excute() {
-  const value1 = editor1.value.getValue();
-  const type = route.name as EnumTools; // 默认类型为 text-size
+  if (!editor1) return;
+  const value1 = editor1.state.doc.toString();
+  const type = route.name as EnumTools;
   try {
-    const [value] = await processContent(value1, type);
-    model2.value.setValue(value);
+    const value2 = await processContent(value1, type);
+    const newState = await createEditorState(value2, currentLanguage2);
+    editor2?.setState(newState);
   } catch (error: any) {
-    editor2.value.setValue(error.message);
+    const newState = await createEditorState(error.message, currentLanguage2);
+    editor2?.setState(newState);
   }
 }
 
 onMounted(async () => {
-  // 初始化编辑器
-  await initEditors();
-
-  // 加载数据
+  const state1 = await createEditorState('', currentLanguage1, { onchange: excute });
+  const state2 = await createEditorState('', currentLanguage2);
+  if (!editor1Container.value || !editor2Container.value) return;
+  editor1 = createEditorInstance(editor1Container.value, state1);
+  editor2 = createEditorInstance(editor2Container.value, state2);
+  EditorManager.addEditor(editor1);
+  EditorManager.addEditor(editor2);
   await fetch();
+  excute();
+  addCommandSave(editor1, async () => {
+    save();
+    excute();
+  });
 });
 
 watch(route, async () => {
   await fetch();
+  excute();
 });
 
 onUnmounted(() => {

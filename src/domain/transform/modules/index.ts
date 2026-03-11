@@ -52,19 +52,5 @@ export async function processContent(input: string, type: EnumTools) {
   if (!methodMap[type]) {
     throw new Error(`Unsupported type: ${type}`);
   }
-  console.log('processContent', type);
-  let output = '';
-  let flag = 'success';
-  try {
-    const result = methodMap[type](input);
-    if (result instanceof Promise) {
-      output = await result;
-    } else {
-      output = result;
-    }
-  } catch (error) {
-    flag = 'failure';
-    output = error instanceof Error ? error.message : '处理失败';
-  }
-  return [output, flag];
+  return await methodMap[type](input);
 }
