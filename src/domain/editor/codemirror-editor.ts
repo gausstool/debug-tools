@@ -12,6 +12,7 @@ import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { bracketMatching, foldKeymap } from '@codemirror/language';
 import { searchKeymap, highlightSelectionMatches } from '@codemirror/search';
 import { autocompletion, closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
+import { MergeView } from '@codemirror/merge';
 // 语言映射
 const languageMap: Record<string, () => Promise<any>> = {
   javascript: async () => (await import('@codemirror/lang-javascript')).javascript,
@@ -100,4 +101,105 @@ export function addCommandSave(editor: EditorView, callback: () => void) {
   };
   editor.dom.addEventListener('keydown', handleKeyDown);
   return () => editor.dom.removeEventListener('keydown', handleKeyDown);
+}
+
+export async function createDiffEditorState(
+  originalValue: string,
+  modifiedValue: string,
+  language: string,
+  { onchange } = {
+    onchange: () => {},
+  }
+) {
+  const languageLoader = languageMap[language] || languageMap['javascript'];
+  const languageExtension = await languageLoader();
+  
+  const originalExtensions = [
+    lineNumbers(),
+    history(),
+    bracketMatching(),
+    closeBrackets(),
+    autocompletion(),
+    crosshairCursor(),
+    highlightActiveLine(),
+    highlightActiveLineGutter(),
+    highlightSelectionMatches(),
+    languageExtension(),
+    vscodeDark,
+    keymap.of([
+      ...closeBracketsKeymap,
+      ...defaultKeymap,
+      ...searchKeymap,
+      ...historyKeymap,
+      ...foldKeymap,
+    ]),
+    EditorView.lineWrapping,
+    EditorView.updateListener.of(update => {
+      if (update.docChanged) {
+        onchange();
+      }
+    }),
+  ];
+
+  const modifiedExtensions = [
+    lineNumbers(),
+    history(),
+    bracketMatching(),
+    closeBrackets(),
+    autocompletion(),
+    crosshairCursor(),
+    highlightActiveLine(),
+    highlightActiveLineGutter(),
+    highlightSelectionMatches(),
+    languageExtension(),
+    vscodeDark,
+    keymap.of([
+      ...closeBracketsKeymap,
+      ...defaultKeymap,
+      ...searchKeymap,
+      ...historyKeymap,
+      ...foldKeymap,
+    ]),
+    EditorView.lineWrapping,
+    EditorView.updateListener.of(update => {
+      if (update.docChanged) {
+        onchange();
+      }
+    }),
+  ];
+
+  return {
+    original: {
+      doc: originalValue,
+      extensions: originalExtensions,
+    },
+    modified: {
+      doc: modifiedValue,
+      extensions: modifiedExtensions,
+    },
+  };
+}
+
+export function createDiffEditorInstance(
+  $container: HTMLElement,
+  originalConfig: any,
+  modifiedConfig: any
+) {
+  const mergeView = new MergeView({
+    parent: $container,
+    a: originalConfig,
+    b: modifiedConfig,
+  });
+  return mergeView;
+}
+
+export function addCommandSaveDiff(mergeView: MergeView, callback: () => void) {
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+      event.preventDefault();
+      callback();
+    }
+  };
+  mergeView.dom.addEventListener('keydown', handleKeyDown);
+  return () => mergeView.dom.removeEventListener('keydown', handleKeyDown);
 }
