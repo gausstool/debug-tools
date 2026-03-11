@@ -1,6 +1,6 @@
 {
   "name": "debug-tools",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "author": "gausszhou",
   "scripts": {
     "dev": "vite --host",
@@ -18,10 +18,10 @@
     "@codemirror/lang-sql": "^6.5.11",
     "@codemirror/lang-yaml": "^6.1.2",
     "@codemirror/language": "^6.10.7",
+    "@codemirror/merge": "^6.12.1",
     "@codemirror/search": "^6.5.11",
     "@codemirror/state": "^6.4.1",
     "@codemirror/view": "^6.36.0",
-    "@gausszhou/json-to-ts": "^0.0.3",
     "@uiw/codemirror-theme-vscode": "^4.25.3",
     "dayjs": "^1.11.7",
     "element-plus": "^2.13.1",

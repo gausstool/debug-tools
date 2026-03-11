@@ -8,9 +8,9 @@
 import localforage from 'localforage';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { EditorState } from '@codemirror/state';
-import { addCommandSaveDiff, createDiffEditorInstance, createDiffEditorState } from '@/domain/editor/codemirror-editor';
+import { addCommandSaveDiff, createDiffEditorInstance, createDiffEditorState } from '@/domain/editor/codemirror-editor-diff';
 import { EditorManager } from '@/domain/editor/codemirror-editor-manager';
+import { MergeView } from '@codemirror/merge';
 
 const code1Default = `// 粘贴需要进行比对的代码
 void main() {
@@ -25,7 +25,7 @@ function main() {
 `;
 
 const diffEditorContainer = ref<HTMLDivElement>();
-let diffEditor: any = null;
+let diffEditor: MergeView | null = null;
 let currentLanguage = 'javascript';
 
 const route = useRoute();
@@ -40,11 +40,23 @@ async function fetch() {
   const value: any = await localforage.getItem(`debug-tools-${String(route.name)}`);
   const { code1 = '', code2 = '' } = value || {};
   if (diffEditor) {
-    const states = await createDiffEditorState(code1 || code1Default, code2 || code2Default, currentLanguage);
-    const originalState = EditorState.create(states.original);
-    const modifiedState = EditorState.create(states.modified);
-    diffEditor.a.setState(originalState);
-    diffEditor.b.setState(modifiedState);
+    const transactionA = diffEditor.a.state.update({
+      changes: {
+        from: 0,
+        to: diffEditor.a.state.doc.length,
+        insert: code1 || code1Default
+      }
+    });
+    diffEditor.a.dispatch(transactionA);
+    
+    const transactionB = diffEditor.b.state.update({
+      changes: {
+        from: 0,
+        to: diffEditor.b.state.doc.length,
+        insert: code2 || code2Default
+      }
+    });
+    diffEditor.b.dispatch(transactionB);
   }
 }
 
