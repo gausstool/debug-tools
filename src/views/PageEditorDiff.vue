@@ -1,25 +1,16 @@
 <template>
   <div class="page-editor-diff" id="editor-diff">
-    <div ref="editor1Container" class="container"></div>
+    <div ref="diffEditorContainer" class="container"></div>
   </div>
 </template>
 
 <script setup lang="ts">
 import localforage from 'localforage';
-import { onMounted, onUnmounted, ref, shallowRef } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import {
-  addCommandSave,
-  createEditorDiff,
-  createEditorModel,
-} from '@/domain/editor/editor';
-import { EditorManager } from '@/domain/editor/editor-manager';
-
-// 使用ref来存储编辑器实例
-const editor1Container = ref<HTMLDivElement>();
-const editor1 = shallowRef<any>(null);
-const model1 = shallowRef<any>(null);
-const model2 = shallowRef<any>(null);
+import { addCommandSaveDiff, createDiffEditorInstance, createDiffEditorState } from '@/domain/editor/codemirror-editor-diff';
+import { EditorManager } from '@/domain/editor/codemirror-editor-manager';
+import { MergeView } from '@codemirror/merge';
 
 const code1Default = `// 粘贴需要进行比对的代码
 void main() {
@@ -32,47 +23,52 @@ function main() {
   console.log("Hello World!"); 
 }
 `;
+
+const diffEditorContainer = ref<HTMLDivElement>();
+let diffEditor: MergeView | null = null;
+let currentLanguage = 'javascript';
+
 const route = useRoute();
 
-async function initEditors() {
-  if (!editor1Container.value) {
-    return;
-  }
-  // 异步创建编辑器模型和实例
-  model1.value = await createEditorModel('', 'javascript');
-  model2.value = await createEditorModel('', 'javascript');
-  
-  editor1.value = await createEditorDiff(editor1Container.value);
-  
-  editor1.value.setModel({
-    original: model1.value,
-    modified: model2.value,
-  });
-  
-  // 添加保存命令
-  await addCommandSave(editor1.value, async () => {
-    await save();
-  });
-  // 添加编辑器到管理列表
-  EditorManager.addEditor(editor1.value);
-}
-
 async function save() {
-  const code1 = model1.value.getValue();
-  const code2 = model2.value.getValue();
+  const code1 = diffEditor ? diffEditor.a.state.doc.toString() : '';
+  const code2 = diffEditor ? diffEditor.b.state.doc.toString() : '';
   await localforage.setItem(`debug-tools-${String(route.name)}`, { code1, code2 });
 }
 
 async function fetch() {
   const value: any = await localforage.getItem(`debug-tools-${String(route.name)}`);
   const { code1 = '', code2 = '' } = value || {};
-  model1.value.setValue(code1 || code1Default);
-  model2.value.setValue(code2 || code2Default);
+  if (diffEditor) {
+    const transactionA = diffEditor.a.state.update({
+      changes: {
+        from: 0,
+        to: diffEditor.a.state.doc.length,
+        insert: code1 || code1Default
+      }
+    });
+    diffEditor.a.dispatch(transactionA);
+    
+    const transactionB = diffEditor.b.state.update({
+      changes: {
+        from: 0,
+        to: diffEditor.b.state.doc.length,
+        insert: code2 || code2Default
+      }
+    });
+    diffEditor.b.dispatch(transactionB);
+  }
 }
 
 onMounted(async () => {
-  await initEditors();
+  const states = await createDiffEditorState('', '', currentLanguage);
+  if (!diffEditorContainer.value) return;
+  diffEditor = createDiffEditorInstance(diffEditorContainer.value, states.original, states.modified);
+  EditorManager.addEditor(diffEditor);
   await fetch();
+  addCommandSaveDiff(diffEditor, async () => {
+    save();
+  });
 });
 
 onUnmounted(() => {
