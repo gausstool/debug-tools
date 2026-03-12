@@ -12,8 +12,8 @@ function createZipArchive(folder, filename) {
   zip.addLocalFolder(folder);
   zip.writeZip(filename);
   console.log(`[info] created successfully`);
-  console.log(`[info] ${filename}`);
-  console.log(`[info] ${fs.statSync(filename).size} bytes`);
+  console.log(`[info] filename: ${filename}`);
+  console.log(`[info] filesize: ${fs.statSync(filename).size} bytes`);
 }
 
 function addZero(num) {
