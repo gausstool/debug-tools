@@ -7,6 +7,7 @@ const PageRegExp = () => import('@/views/PageRegExp.vue');
 const PageRandomPassword = () => import('@/views/PageRandomPassword.vue');
 const PageRandomPort = () => import('@/views/PageRandomPort.vue');
 const PageRandomUUID = () => import('@/views/PageRandomUUID.vue');
+const PageRandomNBase = () => import('@/views/PageRandomNBase.vue');
 
 export interface ITool {
   icon?: string;
@@ -273,11 +274,19 @@ export const tools: ITool[] = [
   },
   {
     icon: '🆔',
-    label: '随机ID生成',
+    label: '随机UUID生成',
     value: EnumTools.RANDOM_UUID,
     component: PageRandomUUID,
     order: 703,
     description: '生成 UUID v1-v7 格式的随机ID',
+  },
+  {
+    icon: '🔢',
+    label: '随机N进制数生成',
+    value: EnumTools.RANDOM_N_BASE,
+    component: PageRandomNBase,
+    order: 704,
+    description: '生成指定进制的随机数字符串，支持 2/8/10/16/36/62 进制',
   },
   {
     label: '随机工具',

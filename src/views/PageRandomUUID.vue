@@ -140,6 +140,7 @@ async function copyToClipboard() {
 }
 
 .form-item {
+  min-height: 32px;
   margin-bottom: 15px;
   display: flex;
   align-items: flex-start;
