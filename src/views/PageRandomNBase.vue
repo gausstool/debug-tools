@@ -2,30 +2,31 @@
   <div class="page-layout">
     <div class="page-container">
       <div class="form-item">
-        <label>随机种子</label>
-        <input type="text" v-model="inputString" placeholder="输入任意字符串作为随机种子" />
+        <label>进制选择</label>
+        <div class="radio-group">
+          <label class="radio-label" v-for="base in supportedBases" :key="base">
+            <input type="radio" v-model="selectedBase" :value="base" />
+            <span>{{ base }}</span>
+          </label>
+        </div>
       </div>
       <div class="form-item">
-        <label>最小端口</label>
-        <input type="number" v-model="minPort" min="1" max="65535" />
-      </div>
-      <div class="form-item">
-        <label>最大端口</label>
-        <input type="number" v-model="maxPort" min="1" max="65535" />
+        <label>字符长度</label>
+        <input type="number" v-model="length" min="1" max="1000" />
       </div>
       <div class="form-item">
         <label>生成结果</label>
-        <input 
-          type="text" 
-          v-model="generatedPort" 
-          readonly 
+        <input
+          type="text"
+          v-model="result"
+          readonly
           @click="copyToClipboard"
-          :title="generatedPort ? '点击复制到剪贴板' : ''"
-          :class="{ 'clickable': generatedPort }"
+          :title="result ? '点击复制到剪贴板' : ''"
+          :class="{ 'clickable': result }"
         />
       </div>
       <div>
-        <button class="g-button" @click="generatePort">生成端口</button>
+        <button class="g-button" @click="generateString">生成字符</button>
         <button class="g-button" @click="resetForm">重置</button>
       </div>
     </div>
@@ -34,37 +35,35 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { randomPort } from '@/domain/transform/modules/random/random-port';
+import { randomNBase, getSupportedBases } from '@/domain/transform/modules/random/random-n-base';
 
-const inputString = ref('');
-const minPort = ref(1025);
-const maxPort = ref(65535);
-const generatedPort = ref('');
+const supportedBases = getSupportedBases();
+const selectedBase = ref(16);
+const length = ref(32);
+const result = ref('');
 
-function generatePort() {
+function generateString() {
   try {
-    const port = randomPort(inputString.value, minPort.value, maxPort.value);
-    generatedPort.value = port.toString();
+    result.value = randomNBase(selectedBase.value, length.value);
   } catch (error) {
-    generatedPort.value = error instanceof Error ? error.message : '生成失败';
+    result.value = error instanceof Error ? error.message : '生成失败';
   }
 }
 
 function resetForm() {
-  inputString.value = '';
-  minPort.value = 1025;
-  maxPort.value = 65535;
-  generatedPort.value = '';
+  selectedBase.value = 16;
+  length.value = 32;
+  result.value = '';
 }
 
 async function copyToClipboard() {
-  if (!generatedPort.value) return;
-  
+  if (!result.value) return;
+
   try {
-    await navigator.clipboard.writeText(generatedPort.value);
+    await navigator.clipboard.writeText(result.value);
   } catch {
     const textArea = document.createElement('textarea');
-    textArea.value = generatedPort.value;
+    textArea.value = result.value;
     textArea.style.position = 'fixed';
     textArea.style.left = '-999999px';
     textArea.style.top = '-999999px';
@@ -131,6 +130,36 @@ async function copyToClipboard() {
 
 .form-item input.clickable:hover {
   background-color: #3a3a3a;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.form-item .radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  font-size: 12px;
+  cursor: pointer;
+  min-width: 40px;
+}
+
+.radio-label input[type='radio'] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #007acc;
+  margin: 0;
+}
+
+.radio-label span {
+  user-select: none;
 }
 
 .g-button {
