@@ -6,6 +6,7 @@ const PageNginxLog = () => import('@/views/PageNginxLog.vue');
 const PageRegExp = () => import('@/views/PageRegExp.vue');
 const PageRandomPassword = () => import('@/views/PageRandomPassword.vue');
 const PageRandomPort = () => import('@/views/PageRandomPort.vue');
+const PageRandomUUID = () => import('@/views/PageRandomUUID.vue');
 
 export interface ITool {
   icon?: string;
@@ -269,6 +270,14 @@ export const tools: ITool[] = [
     component: PageRandomPort,
     order: 702,
     description: '根据输入字符串和端口范围生成随机端口',
+  },
+  {
+    icon: '🆔',
+    label: '随机ID生成',
+    value: EnumTools.RANDOM_UUID,
+    component: PageRandomUUID,
+    order: 703,
+    description: '生成 UUID v1-v7 格式的随机ID',
   },
   {
     label: '随机工具',
