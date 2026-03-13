@@ -28,6 +28,7 @@ export enum EnumTools {
     
     RANDOM_PASSWORD = "random-password",
     RANDOM_PORT = "random-port",
+    RANDOM_UUID = "random-uuid",
     
     NGINX_LOG_PARSE = "nginx-log-parse",
     REGEX_TEST = "regex-test",
