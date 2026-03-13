@@ -1,7 +1,7 @@
-import { EnumTools } from '@/domain/transform/types';
 import localforage from 'localforage';
 import { defineStore } from 'pinia';
 import { onMounted, ref, unref } from 'vue';
+import { EnumTools } from '@/domain/transform/types';
 
 function getJsonSafe<T>(json: string, defaultValue: T): T {
   try {

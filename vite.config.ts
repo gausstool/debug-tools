@@ -23,14 +23,14 @@ export default defineConfig(async () => ({
       output: {
         manualChunks(id: string) {
           if (id.includes('node_modules') || id.includes('.pnpm')) {
-            if (id.includes('monaco-editor/esm')) {
-              return 'monaco-editor';
-            }
-            if (id.includes('sql-formatter')) {
-              return 'sql-formatter';
-            }
+            // if (id.includes('sql-formatter')) {
+            //   return 'sql-formatter';
+            // }
             if (id.includes('js-base64')) {
               return 'js-base64';
+            }
+            if (id.includes('uuid')) {
+              return 'uuid';
             }
             if (id.includes('/vue') || id.includes('/pinia')) {
               return 'core';
