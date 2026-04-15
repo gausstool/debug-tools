@@ -15,7 +15,11 @@ export default defineConfig(async () => ({
   resolve: {
     alias: {
       '@': path.resolve('src'),
+      'monaco-editor': path.resolve('node_modules/monaco-editor'),
     },
+  },
+  optimizeDeps: {
+    include: ['monaco-editor'],
   },
   build: {
     outDir: process.env.VITE_BUILD_DIR || 'dist',
@@ -34,6 +38,9 @@ export default defineConfig(async () => ({
             }
             if (id.includes('/vue') || id.includes('/pinia')) {
               return 'core';
+            }
+            if (id.includes('monaco-editor')) {
+              return 'monaco-editor';
             }
           }
         },

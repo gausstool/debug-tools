@@ -1,6 +1,5 @@
 import { EnumTools } from './types';
 import PageWelcome from '@/views/PageWelcome.vue';
-const EditorDiff = () => import('@/views/PageEditorDiff.vue');
 const EditorDouble = () => import('@/views/PageEditorDouble.vue');
 const PageNginxLog = () => import('@/views/PageNginxLog.vue');
 const PageRegExp = () => import('@/views/PageRegExp.vue');
@@ -28,14 +27,6 @@ export const tools: ITool[] = [
     component: EditorDouble,
     order: 1,
     space: true,
-  },
-  {
-    icon: '🔀',
-    label: 'TEXT 对比',
-    value: EnumTools.TEXT_DIFF,
-    component: EditorDiff,
-    order: 2,
-    description: '对比两个文本字符串的差异',
   },
   {
     icon: '🔍',

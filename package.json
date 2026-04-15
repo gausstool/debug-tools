@@ -1,6 +1,6 @@
 {
   "name": "debug-tools",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "author": "gausszhou",
   "scripts": {
     "dev": "vite --host",
@@ -26,6 +26,7 @@
     "element-plus": "^2.13.1",
     "js-base64": "^3.7.8",
     "localforage": "^1.10.0",
+    "monaco-editor": "^0.55.1",
     "nprogress": "^0.2.0",
     "pinia": "^3.0.3",
     "sql-formatter": "^15.6.10",
