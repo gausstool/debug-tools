@@ -1,0 +1,1 @@
+function a(t=12,r="ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz123456789"){if(!r||r.length===0)throw new Error("字符范围不能为空");if(t<1)throw new Error("长度必须大于0");let n="";for(let o=0;o<t;o++)n+=r.charAt(Math.floor(Math.random()*r.length));return n}function e(t=12){return a(t,"ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789")}export{a,e as r};
