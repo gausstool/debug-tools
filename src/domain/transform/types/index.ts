@@ -33,4 +33,7 @@ export enum EnumTools {
     
     NGINX_LOG_PARSE = "nginx-log-parse",
     REGEX_TEST = "regex-test",
+
+    CSS_TO_SASS = "css-to-sass",
+    CSS_TO_SCSS = "css-to-scss",
 }

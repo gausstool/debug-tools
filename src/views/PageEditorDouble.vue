@@ -103,6 +103,31 @@ Hello world，这是第一行
 00:00:10,000 --> 00:00:12,500
 最后一段`;
 
+const codeCss = `.a {
+  color: red;
+  font-size: 16px;
+}
+
+.a .b {
+  color: blue;
+  font-size: 14px;
+}
+
+.a .b .c {
+  color: green;
+  font-size: 12px;
+}
+
+.d {
+  margin: 10px;
+  padding: 10px;
+}
+
+.d .e {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}`;
+
 // 使用ref来存储编辑器实例
 const editor1Container = ref<HTMLDivElement>();
 const editor2Container = ref<HTMLDivElement>();
@@ -133,6 +158,12 @@ async function fetch() {
   } else if (route.name == EnumTools.TEXT_SORT) {
     currentLanguage1 = 'text';
     currentLanguage2 = 'text';
+  } else if (route.name == EnumTools.CSS_TO_SASS) {
+    currentLanguage1 = 'css';
+    currentLanguage2 = 'sass';
+  } else if (route.name == EnumTools.CSS_TO_SCSS) {
+    currentLanguage1 = 'css';
+    currentLanguage2 = 'scss';
   }
 
   // 设置默认值
@@ -177,6 +208,10 @@ async function fetch() {
     defaultValue = codeLineSplit;
   } else if (route.name == EnumTools.TEXT_SRT_PLAIN) {
     defaultValue = codeSrt;
+  } else if (route.name == EnumTools.CSS_TO_SASS) {
+    defaultValue = codeCss;
+  } else if (route.name == EnumTools.CSS_TO_SCSS) {
+    defaultValue = codeCss;
   } 
 
   if (editor1) {
