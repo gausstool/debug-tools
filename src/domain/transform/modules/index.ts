@@ -17,6 +17,8 @@ import { nginxLogParser } from './http/nginx-log-parse';
 import { randomPassword } from './random/random-password';
 import { srtToPlainText } from './text/srt';
 import { randomPortString } from './random/random-port';
+import { cssToSass } from './css/css-to-sass';
+import { cssToScss } from './css/css-to-scss';
 
 type ToolFunction = (input: any) => string | Promise<string>;
 
@@ -48,6 +50,8 @@ export const methodMap: Record<EnumTools, ToolFunction> = {
   [EnumTools.RANDOM_PORT]: randomPortString,
   [EnumTools.RANDOM_UUID]: (input: string) => input, // Placeholder for random UUID function
   [EnumTools.RANDOM_N_BASE]: (input: string) => input, // Placeholder for random N-base function
+  [EnumTools.CSS_TO_SASS]: cssToSass,
+  [EnumTools.CSS_TO_SCSS]: cssToScss,
 };
 
 export async function processContent(input: string, type: EnumTools) {

@@ -294,6 +294,29 @@ export const tools: ITool[] = [
     order: 801,
     description: '测试正则表达式对文本字符串的匹配情况',
   },
+  {
+    label: 'CSS 相关工具',
+    value: '',
+    component: EditorDouble,
+    order: 300,
+    space: true,
+  },
+  {
+    icon: '🎨',
+    label: 'CSS 转 Sass',
+    value: EnumTools.CSS_TO_SASS,
+    component: EditorDouble,
+    order: 301,
+    description: '将 CSS 代码转换为 Sass 语法',
+  },
+  {
+    icon: '🎨',
+    label: 'CSS 转 Scss',
+    value: EnumTools.CSS_TO_SCSS,
+    component: EditorDouble,
+    order: 302,
+    description: '将 CSS 代码转换为 Scss 语法',
+  },
 ].sort((a, b) => a.order - b.order);
 
 // 导出默认路由配置
