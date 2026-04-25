@@ -22,31 +22,36 @@ function createNode(type: 'rule' | 'property', selector?: string, property?: str
 }
 
 /**
- * 按空格分割选择器，保留复合选择器（如 .c.is-active）不拆分
+ * 按空格分割选择器，保留复合选择器（如 .c.is-active）不被拆分
  */
 function splitSelector(selector: string): string[] {
   return selector.split(/\s+/).filter(p => p.trim() !== '');
 }
 
+/**
+ * 解析 CSS / SCSS 文本为嵌套树结构
+ * 自动兼容扁平 CSS 和嵌套 SCSS
+ */
 export function parseCssToTree(input: string): CssTree {
   const root = createNode('rule', 'root');
   const lines = input.split('\n');
-  // 栈用于跟踪当前所在规则节点，栈顶为当前规则
+  // 栈顶始终是当前所在的规则节点（从 root 开始）
   const ruleStack: CssNode[] = [root];
 
   for (const line of lines) {
     const trimmed = line.trim();
     if (!trimmed) continue;
 
-    // 遇到规则开始
-    if (trimmed.endsWith('{') || trimmed.includes('{')) {
+    // 遇到规则开始（可能包含 '{'）
+    if (trimmed.includes('{')) {
       const fullSelector = trimmed.replace('{', '').trim();
       if (!fullSelector) continue;
 
       const parts = splitSelector(fullSelector);
-      let currentNode: CssNode = root;
+      // 关键改动：从当前栈顶开始，而不是 root
+      let currentNode = ruleStack[ruleStack.length - 1];
 
-      // 从根节点开始，逐级下降找到或创建节点
+      // 逐级下降，在 currentNode 的子树中找或创建每个选择器片段
       for (const part of parts) {
         let child = currentNode.children.find(
           c => c.type === 'rule' && c.selector === part
@@ -59,6 +64,7 @@ export function parseCssToTree(input: string): CssTree {
         currentNode = child;
       }
 
+      // 最终节点入栈，成为当前作用域
       ruleStack.push(currentNode);
     }
     // 遇到规则结束
@@ -87,6 +93,8 @@ export function parseCssToTree(input: string): CssTree {
 
   return { root };
 }
+
+/* ========== 输出函数（不变） ========== */
 
 export function treeToSass(tree: CssTree): string {
   const lines: string[] = [];
