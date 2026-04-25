@@ -9,6 +9,9 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 关键：授予写权限1
+    
     steps:
       - uses: actions/checkout@v4
 
