@@ -29,6 +29,16 @@ describe('nginx-log-parse', () => {
       expect(parsed[0].remote_addr).toBeDefined();
     });
 
+    it('should parse multiple log lines', () => {
+      const input = `127.0.0.1 - - [01/Jan/2024:00:00:00 +0000] "GET /path HTTP/1.1" 200 1234 "http://example.com" "Mozilla/5.0"
+127.0.0.1 - - [01/Jan/2024:00:00:01 +0000] "POST /api HTTP/1.1" 201 100 "http://example.com" "Mozilla/5.0"`;
+      const result = nginxLogParser(input);
+      const parsed = JSON.parse(result);
+      expect(parsed).toHaveLength(2);
+      expect(parsed[0].remote_addr).toBe('127.0.0.1');
+      expect(parsed[1].request).toContain('POST');
+    });
+
     it('should handle empty input', () => {
       const result = nginxLogParser('');
       const parsed = JSON.parse(result);

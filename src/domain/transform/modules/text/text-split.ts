@@ -1,4 +1,4 @@
-function textSplit(input: string, separator: string) {
+export function textSplit(input: string, separator: string) {
   return JSON.stringify(input.split(separator), null, 2);
 }
 

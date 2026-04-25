@@ -25,4 +25,5 @@ describe('csp-parse', () => {
       expect(parsed['default-src']).toBeDefined();
     });
   });
+
 });
