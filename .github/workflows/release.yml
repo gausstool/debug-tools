@@ -25,17 +25,11 @@ jobs:
 
       - name: Build artifacts
         run: |
-          sh shells/zip-archive.sh
-          # 你的构建命令，例如：
-          # npm run build
-          # go build -o myapp
+          sh shells/zip-archive.sh # 运行构建脚本
           
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            out/*.zip
-            # 要上传的文件，例如：
-            # dist/*.zip
-            # myapp
+            out/*.zip # 发布的文件路径
           generate_release_notes: true  # 自动生成 Release 说明
