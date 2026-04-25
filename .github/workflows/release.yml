@@ -34,5 +34,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            out/*.zip # 发布的文件路径
-          generate_release_notes: true  # 自动生成 Release 说明
+            *.zip # 发布的文件路径

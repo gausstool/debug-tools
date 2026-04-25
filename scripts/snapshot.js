@@ -29,4 +29,4 @@ const time =
   addZero(date.getHours()) +
   addZero(date.getMinutes());
   
-createZipArchive(distFolderPath, `out/${name}.v${version}.${time}.zip`);
+createZipArchive(distFolderPath, `${name}.v${version}.${time}.zip`);
