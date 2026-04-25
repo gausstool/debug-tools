@@ -1,10 +1,11 @@
 export function sizeofByte(str: string) {
   let utf8Total = 0;
   let utf16Total = 0;
+  let charCount = 0;
 
   for (let i = 0, len = str.length; i < len; ) {
     const charCode = str.codePointAt(i) as number;
-    
+
     // 计算 UTF-8 字节数
     if (charCode <= 0x007f) {
       utf8Total += 1;
@@ -24,11 +25,13 @@ export function sizeofByte(str: string) {
       utf16Total += 4;
       i += 2;
     }
+
+    charCount++;
   }
 
   return JSON.stringify(
     {
-      chars: str.length,
+      chars: charCount,
       utf8Bytes: utf8Total,
       utf16Bytes: utf16Total,
     },

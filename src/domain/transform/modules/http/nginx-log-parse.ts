@@ -43,7 +43,7 @@ export class NginxLogParser {
     }
     const match = this.parser.exec(line);
     if (!match) {
-      return null;
+      return {};
     }
 
     const result: Record<string, string> = {};
@@ -64,7 +64,7 @@ export function nginxLogParser(input: string) {
   const lines = input.split('\n').filter(line => line.trim());
   const results = lines.map(line => {
     const parsed = parser.parse(line);
-    return parsed ? parsed : { error: '无法解析日志行', line };
+    return Object.keys(parsed).length > 0 ? parsed : { error: '无法解析日志行', line };
   });
 
   return JSON.stringify(results, null, 2);
