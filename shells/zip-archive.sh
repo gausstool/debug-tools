@@ -16,6 +16,7 @@ VITE_BUILD_DIR=dist
 EOF
 
 echo "正在构建..."
+pnpm i
 npm run build
 
 # 进入构建目录

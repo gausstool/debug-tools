@@ -16,4 +16,4 @@ function createZipArchive(folder, filename) {
   console.log(`[info] filesize: ${fs.statSync(filename).size} bytes`);
 }
 
-createZipArchive(distFolderPath, `out/${name}_v${version}.zip`);
+createZipArchive(distFolderPath, `${name}_v${version}.zip`);
