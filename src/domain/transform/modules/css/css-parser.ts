@@ -2,6 +2,7 @@ export interface CssNode {
   type: 'rule' | 'property';
   selector?: string;
   property?: string;
+  value?: string;
   children: CssNode[];
   parent?: CssNode;
 }
@@ -10,85 +11,74 @@ export interface CssTree {
   root: CssNode;
 }
 
-function createNode(type: 'rule' | 'property', selector?: string, property?: string): CssNode {
+function createNode(type: 'rule' | 'property', selector?: string, property?: string, value?: string): CssNode {
   return {
     type,
     selector,
     property,
+    value,
     children: [],
   };
 }
 
+/**
+ * 按空格分割选择器，保留复合选择器（如 .c.is-active）不拆分
+ */
 function splitSelector(selector: string): string[] {
-  return selector.split(/\s+/).filter(part => part.trim() !== '');
-}
-
-function findRuleBySelector(root: CssNode, selector: string): CssNode | null {
-  function search(node: CssNode): CssNode | null {
-    if (node.type === 'rule' && node.selector === selector) {
-      return node;
-    }
-    for (const child of node.children) {
-      const found = search(child);
-      if (found) return found;
-    }
-    return null;
-  }
-  return search(root);
-}
-
-function getParentSelector(selector: string): string | null {
-  const parts = splitSelector(selector);
-  if (parts.length <= 1) return null;
-  return parts.slice(0, -1).join(' ');
+  return selector.split(/\s+/).filter(p => p.trim() !== '');
 }
 
 export function parseCssToTree(input: string): CssTree {
-  const root = createNode('rule', '');
+  const root = createNode('rule', 'root');
   const lines = input.split('\n');
-
-  let lastRule: CssNode | null = null;
+  // 栈用于跟踪当前所在规则节点，栈顶为当前规则
+  const ruleStack: CssNode[] = [root];
 
   for (const line of lines) {
     const trimmed = line.trim();
     if (!trimmed) continue;
 
-    if (trimmed.includes('{')) {
-      const selector = trimmed.split('{')[0].trim();
-      const parentSelector = getParentSelector(selector);
+    // 遇到规则开始
+    if (trimmed.endsWith('{') || trimmed.includes('{')) {
+      const fullSelector = trimmed.replace('{', '').trim();
+      if (!fullSelector) continue;
 
-      if (parentSelector) {
-        const parentRule = findRuleBySelector(root, parentSelector);
-        if (parentRule) {
-          const existingChild = findRuleBySelector(parentRule, selector);
-          if (existingChild) {
-            lastRule = existingChild;
-          } else {
-            const newNode = createNode('rule', selector);
-            newNode.parent = parentRule;
-            parentRule.children.push(newNode);
-            lastRule = newNode;
-          }
-          continue;
+      const parts = splitSelector(fullSelector);
+      let currentNode: CssNode = root;
+
+      // 从根节点开始，逐级下降找到或创建节点
+      for (const part of parts) {
+        let child = currentNode.children.find(
+          c => c.type === 'rule' && c.selector === part
+        );
+        if (!child) {
+          child = createNode('rule', part);
+          child.parent = currentNode;
+          currentNode.children.push(child);
         }
+        currentNode = child;
       }
 
-      const existingNode = findRuleBySelector(root, selector);
-      if (existingNode) {
-        lastRule = existingNode;
-      } else {
-        const newNode = createNode('rule', selector);
-        newNode.parent = root;
-        root.children.push(newNode);
-        lastRule = newNode;
+      ruleStack.push(currentNode);
+    }
+    // 遇到规则结束
+    else if (trimmed === '}' || trimmed.endsWith('}')) {
+      if (ruleStack.length > 1) {
+        ruleStack.pop();
       }
-    } else if (trimmed.includes('}')) {
-      lastRule = lastRule?.parent || null;
-    } else {
-      const property = trimmed.replace(/;$/, '').trim();
-      if (property) {
-        const parent = lastRule || root;
-        const propNode = createNode('property', undefined, property);
+    }
+    // 属性定义
+    else if (trimmed.includes(':') && !trimmed.endsWith('}')) {
+      const colonIndex = trimmed.indexOf(':');
+      const property = trimmed.substring(0, colonIndex).trim();
+      let value = trimmed.substring(colonIndex + 1).trim();
+      if (value.endsWith(';')) {
+        value = value.slice(0, -1).trim();
+      }
+
+      if (property && value && ruleStack.length > 0) {
+        const parent = ruleStack[ruleStack.length - 1];
+        const propNode = createNode('property', undefined, property, value);
         propNode.parent = parent;
         parent.children.push(propNode);
       }
@@ -102,12 +92,14 @@ export function treeToSass(tree: CssTree): string {
   const lines: string[] = [];
 
   function traverse(node: CssNode, depth: number) {
+    if (node.type === 'rule' && node.selector && node.selector !== 'root') {
+      lines.push('  '.repeat(depth - 1) + node.selector);
+    }
     for (const child of node.children) {
       if (child.type === 'rule') {
-        lines.push('  '.repeat(depth) + (child.selector || ''));
         traverse(child, depth + 1);
       } else if (child.type === 'property') {
-        lines.push('  '.repeat(depth) + (child.property || ''));
+        lines.push('  '.repeat(depth) + child.property + ': ' + child.value);
       }
     }
   }
@@ -120,14 +112,18 @@ export function treeToScss(tree: CssTree): string {
   const lines: string[] = [];
 
   function traverse(node: CssNode, depth: number) {
+    if (node.type === 'rule' && node.selector && node.selector !== 'root') {
+      lines.push('  '.repeat(depth - 1) + node.selector + ' {');
+    }
     for (const child of node.children) {
       if (child.type === 'rule') {
-        lines.push('  '.repeat(depth) + (child.selector || '') + ' {');
         traverse(child, depth + 1);
-        lines.push('  '.repeat(depth) + '}');
       } else if (child.type === 'property') {
-        lines.push('  '.repeat(depth) + (child.property || '') + ';');
+        lines.push('  '.repeat(depth) + child.property + ': ' + child.value + ';');
       }
+    }
+    if (node.type === 'rule' && node.selector && node.selector !== 'root') {
+      lines.push('  '.repeat(depth - 1) + '}');
     }
   }
 

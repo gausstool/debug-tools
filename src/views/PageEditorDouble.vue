@@ -118,15 +118,10 @@ const codeCss = `.a {
   font-size: 12px;
 }
 
-.d {
-  margin: 10px;
-  padding: 10px;
+.a .b .c.is-active{
+  color: yellow;
 }
-
-.d .e {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}`;
+`;
 
 // 使用ref来存储编辑器实例
 const editor1Container = ref<HTMLDivElement>();
