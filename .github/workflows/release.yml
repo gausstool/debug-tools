@@ -28,10 +28,10 @@ jobs:
 
       - name: Build artifacts
         run: |
-          sh shells/zip-archive.sh # 运行构建脚本
+          sh shells/zip-archive.sh
           
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            *.zip # 发布的文件路径
+            out/*.zip
