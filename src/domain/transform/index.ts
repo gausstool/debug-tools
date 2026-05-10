@@ -7,6 +7,7 @@ const PageRandomPassword = () => import('@/views/PageRandomPassword.vue');
 const PageRandomPort = () => import('@/views/PageRandomPort.vue');
 const PageRandomUUID = () => import('@/views/PageRandomUUID.vue');
 const PageRandomNBase = () => import('@/views/PageRandomNBase.vue');
+const PageLorem = () => import('@/views/PageLorem.vue');
 
 export interface ITool {
   icon?: string;
@@ -162,7 +163,7 @@ export const tools: ITool[] = [
     order: 203,
     description: '对 Base64 编码的字符串进行解码',
   },
-    {
+  {
     label: 'CSS 相关工具',
     value: '',
     component: EditorDouble,
@@ -286,6 +287,14 @@ export const tools: ITool[] = [
     component: PageRandomPort,
     order: 704,
     description: '根据输入字符串和端口范围生成随机端口',
+  },
+  {
+    icon: '📝',
+    label: 'Lorem 生成',
+    value: EnumTools.LOREM,
+    component: PageLorem,
+    order: 705,
+    description: '生成 Lorem Ipsum 随机英文文本',
   },
 
   {
