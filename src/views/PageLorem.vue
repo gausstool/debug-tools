@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { generateLorem as genLorem } from '@/domain/transform/modules/random/random-lorem';
 import ResultTextarea from '@/components/ResultTextarea.vue';
 
@@ -61,6 +61,14 @@ const sentencesPerParagraph = ref(3);
 const wordsPerSentence = ref(8);
 const startWithClassic = ref(true);
 const result = ref('');
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
+
+watch(paragraphs, (val) => { paragraphs.value = clamp(val, 1, 32); });
+watch(sentencesPerParagraph, (val) => { sentencesPerParagraph.value = clamp(val, 1, 32); });
+watch(wordsPerSentence, (val) => { wordsPerSentence.value = clamp(val, 1, 32); });
 
 function generateLorem() {
   try {
