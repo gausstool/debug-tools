@@ -41,6 +41,7 @@ export interface LoremOptions {
   sentencesPerParagraph: number;
   wordsPerSentence: number;
   startWithClassic?: boolean;
+  outputFormat?: 'paragraph' | 'list';
 }
 
 export function generateLorem(options: Partial<LoremOptions> = {}): string {
@@ -49,6 +50,7 @@ export function generateLorem(options: Partial<LoremOptions> = {}): string {
     sentencesPerParagraph = 3,
     wordsPerSentence = 8,
     startWithClassic = false,
+    outputFormat = 'paragraph',
   } = options;
 
   const paragraphsArr: string[] = [];
@@ -74,8 +76,12 @@ export function generateLorem(options: Partial<LoremOptions> = {}): string {
       }
       sentences.push(sentence);
     }
-    const paragraph = sentences.join(' ');
-    paragraphsArr.push(paragraph);
+
+    if (outputFormat === 'list') {
+      sentences.forEach((s) => paragraphsArr.push('- ' + s));
+    } else {
+      paragraphsArr.push(sentences.join(' '));
+    }
   }
 
   return paragraphsArr.join('\n\n');

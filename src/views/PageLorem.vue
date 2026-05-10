@@ -2,6 +2,15 @@
   <div class="page-layout">
     <div class="page-container">
       <div class="form-item">
+        <label class="form-item-label">输出格式</label>
+        <div class="form-item-content">
+          <select v-model="outputFormat">
+            <option value="paragraph">段落</option>
+            <option value="list">列表</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-item">
         <label class="form-item-label">段落数量</label>
         <div class="form-item-content">
           <input type="number" v-model="paragraphs" min="1" max="32" />
@@ -42,6 +51,7 @@ import { ref } from 'vue';
 import { generateLorem as genLorem } from '@/domain/transform/modules/random/random-lorem';
 import ResultTextarea from '@/components/ResultTextarea.vue';
 
+const outputFormat = ref<'paragraph' | 'list'>('paragraph');
 const paragraphs = ref(1);
 const sentencesPerParagraph = ref(3);
 const wordsPerSentence = ref(8);
@@ -51,6 +61,7 @@ const result = ref('');
 function generateLorem() {
   try {
     const text = genLorem({
+      outputFormat: outputFormat.value,
       paragraphs: paragraphs.value,
       sentencesPerParagraph: sentencesPerParagraph.value,
       wordsPerSentence: wordsPerSentence.value,
@@ -63,6 +74,7 @@ function generateLorem() {
 }
 
 function resetForm() {
+  outputFormat.value = 'paragraph';
   paragraphs.value = 1;
   sentencesPerParagraph.value = 3;
   wordsPerSentence.value = 8;
@@ -134,6 +146,17 @@ function resetForm() {
 .form-item-content > .checkbox-group,
 .form-item-content > .radio-group {
   width: 100%;
+}
+
+.form-item-content > select {
+  outline: none;
+  border: none;
+  background-color: #3c3c3c;
+  color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 3px;
+  height: 28px;
+  box-sizing: border-box;
 }
 
 .form-item input[type='number'] {
