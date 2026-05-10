@@ -45,7 +45,7 @@ import ResultTextarea from '@/components/ResultTextarea.vue';
 const paragraphs = ref(1);
 const sentencesPerParagraph = ref(3);
 const wordsPerSentence = ref(8);
-const startWithClassic = ref(false);
+const startWithClassic = ref(true);
 const result = ref('');
 
 function generateLorem() {
@@ -66,7 +66,7 @@ function resetForm() {
   paragraphs.value = 1;
   sentencesPerParagraph.value = 3;
   wordsPerSentence.value = 8;
-  startWithClassic.value = false;
+  startWithClassic.value = true;
   result.value = '';
 }
 </script>
