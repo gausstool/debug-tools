@@ -2,19 +2,6 @@
   <div class="page-layout">
     <div class="page-container">
       <div class="form-item">
-        <label class="form-item-label">输出格式</label>
-        <div class="form-item-content">
-          <label class="radio-label">
-            <input type="radio" v-model="outputFormat" value="paragraph" />
-            段落
-          </label>
-          <label class="radio-label">
-            <input type="radio" v-model="outputFormat" value="list" />
-            列表
-          </label>
-        </div>
-      </div>
-      <div class="form-item">
         <label class="form-item-label">段落数量</label>
         <div class="form-item-content">
           <input type="number" v-model="paragraphs" min="1" max="32" />
@@ -38,6 +25,19 @@
           <label class="checkbox-label">
             <input type="checkbox" v-model="startWithClassic" />
             从"Lorem ipsum..."开始
+          </label>
+        </div>
+      </div>
+      <div class="form-item">
+        <label class="form-item-label">输出格式</label>
+        <div class="form-item-content">
+          <label class="radio-label">
+            <input type="radio" v-model="outputFormat" value="paragraph" />
+            段落
+          </label>
+          <label class="radio-label">
+            <input type="radio" v-model="outputFormat" value="list" />
+            列表
           </label>
         </div>
       </div>
