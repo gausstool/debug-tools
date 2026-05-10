@@ -34,15 +34,22 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { randomNBase, getSupportedBases } from '@/domain/transform/modules/random/random-n-base';
 import ResultTextarea from '@/components/ResultTextarea.vue';
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
 
 const supportedBases = getSupportedBases();
 const selectedBase = ref(16);
 const length = ref(32);
 const batchCount = ref(1);
 const result = ref('');
+
+watch(length, (val) => { length.value = clamp(val, 1, 1000); });
+watch(batchCount, (val) => { batchCount.value = clamp(val, 1, 100); });
 
 function generateString() {
   try {

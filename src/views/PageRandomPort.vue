@@ -29,14 +29,21 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { randomPort } from '@/domain/transform/modules/random/random-port';
 import ResultTextarea from '@/components/ResultTextarea.vue';
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
 
 const inputString = ref('');
 const minPort = ref(1025);
 const maxPort = ref(65535);
 const generatedPort = ref('');
+
+watch(minPort, (val) => { minPort.value = clamp(val, 1, 65535); });
+watch(maxPort, (val) => { maxPort.value = clamp(val, 1, 65535); });
 
 function generatePort() {
   try {

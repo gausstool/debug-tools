@@ -54,9 +54,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { generateUUID, type UUIDVersion } from '@/domain/transform/modules/random/random-uuid';
 import ResultTextarea from '@/components/ResultTextarea.vue';
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
 
 const selectedVersion = ref<UUIDVersion>('v4');
 const namespace = ref('');
@@ -64,6 +68,8 @@ const name = ref('');
 const count = ref(1);
 const includeDashes = ref(true);
 const result = ref('');
+
+watch(count, (val) => { count.value = clamp(val, 1, 100); });
 
 const needsNamespace = computed(() => {
   return selectedVersion.value === 'v3' || selectedVersion.value === 'v5';

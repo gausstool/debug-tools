@@ -46,13 +46,20 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { randomString } from '@/domain/transform/modules/random/random-password';
 import ResultTextarea from '@/components/ResultTextarea.vue';
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
 
 const length = ref(16);
 const batchCount = ref(1);
 const result = ref('');
+
+watch(length, (val) => { length.value = clamp(val, 1, 1000); });
+watch(batchCount, (val) => { batchCount.value = clamp(val, 1, 100); });
 
 const charTypes = ref({
   numeric: true,
