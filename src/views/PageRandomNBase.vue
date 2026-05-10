@@ -2,31 +2,31 @@
   <div class="page-layout">
     <div class="page-container">
       <div class="form-item">
-        <label>进制选择</label>
-        <div class="radio-group">
-          <label class="radio-label" v-for="base in supportedBases" :key="base">
-            <input type="radio" v-model="selectedBase" :value="base" />
-            <span>{{ base }}</span>
-          </label>
+        <label class="form-item-label">进制选择</label>
+        <div class="form-item-content">
+          <div class="radio-group">
+            <label class="radio-label" v-for="base in supportedBases" :key="base">
+              <input type="radio" v-model="selectedBase" :value="base" />
+              <span>{{ base }}</span>
+            </label>
+          </div>
         </div>
       </div>
       <div class="form-item">
-        <label>字符长度</label>
-        <input type="number" v-model="length" min="1" max="1000" />
+        <label class="form-item-label">字符长度</label>
+        <div class="form-item-content">
+          <input type="number" v-model="length" min="1" max="1000" />
+        </div>
       </div>
       <div class="form-item">
-        <label>生成结果</label>
-        <input
-          type="text"
-          v-model="result"
-          readonly
-          @click="copyToClipboard"
-          :title="result ? '点击复制到剪贴板' : ''"
-          :class="{ 'clickable': result }"
-        />
+        <label class="form-item-label">批量生成</label>
+        <div class="form-item-content">
+          <input type="number" v-model="batchCount" min="1" max="100" />
+        </div>
       </div>
+      <ResultTextarea v-model="result" />
       <div>
-        <button class="g-button" @click="generateString">生成字符</button>
+        <button class="g-button" @click="generateString">生成</button>
         <button class="g-button" @click="resetForm">重置</button>
       </div>
     </div>
@@ -34,17 +34,30 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { randomNBase, getSupportedBases } from '@/domain/transform/modules/random/random-n-base';
+import ResultTextarea from '@/components/ResultTextarea.vue';
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
 
 const supportedBases = getSupportedBases();
 const selectedBase = ref(16);
 const length = ref(32);
+const batchCount = ref(1);
 const result = ref('');
+
+watch(length, (val) => { length.value = clamp(val, 1, 1000); });
+watch(batchCount, (val) => { batchCount.value = clamp(val, 1, 100); });
 
 function generateString() {
   try {
-    result.value = randomNBase(selectedBase.value, length.value);
+    const results: string[] = [];
+    for (let i = 0; i < batchCount.value; i++) {
+      results.push(randomNBase(selectedBase.value, length.value));
+    }
+    result.value = results.join('\n');
   } catch (error) {
     result.value = error instanceof Error ? error.message : '生成失败';
   }
@@ -53,30 +66,8 @@ function generateString() {
 function resetForm() {
   selectedBase.value = 16;
   length.value = 32;
+  batchCount.value = 1;
   result.value = '';
-}
-
-async function copyToClipboard() {
-  if (!result.value) return;
-
-  try {
-    await navigator.clipboard.writeText(result.value);
-  } catch {
-    const textArea = document.createElement('textarea');
-    textArea.value = result.value;
-    textArea.style.position = 'fixed';
-    textArea.style.left = '-999999px';
-    textArea.style.top = '-999999px';
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-    try {
-      document.execCommand('copy');
-    } catch (err) {
-      console.error('复制失败:', err);
-    }
-    document.body.removeChild(textArea);
-  }
 }
 </script>
 
@@ -98,14 +89,26 @@ async function copyToClipboard() {
   min-height: 32px;
   margin-bottom: 15px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
 }
 
-.form-item label {
+.form-item-label {
   color: #ffffff;
   font-size: 12px;
   min-width: 120px;
+  padding-top: 5px;
+}
+
+.form-item-content {
+  flex: 1;
+}
+
+.form-item-content > input,
+.form-item-content > select,
+.form-item-content > .checkbox-group,
+.form-item-content > .radio-group {
+  width: 100%;
 }
 
 .form-item input {
@@ -116,19 +119,36 @@ async function copyToClipboard() {
   padding: 5px 10px;
   border-radius: 3px;
   flex: 1;
+  height: 28px;
+  box-sizing: border-box;
 }
 
-.form-item input:read-only {
+.form-item textarea {
+  outline: none;
+  border: none;
+  background-color: #3c3c3c;
+  color: #ffffff;
+  padding: 0;
+  border-radius: 3px;
+  flex: 1;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.form-item input:read-only,
+.form-item textarea:read-only {
   background-color: #2a2a2a;
   color: #888888;
 }
 
-.form-item input.clickable {
+.form-item input.clickable,
+.form-item textarea.clickable {
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
-.form-item input.clickable:hover {
+.form-item input.clickable:hover,
+.form-item textarea.clickable:hover {
   background-color: #3a3a3a;
 }
 
@@ -138,6 +158,7 @@ async function copyToClipboard() {
   align-items: center;
   gap: 8px;
   flex: 1;
+  height: 28px;
 }
 
 .form-item .radio-label {
@@ -148,6 +169,7 @@ async function copyToClipboard() {
   font-size: 12px;
   cursor: pointer;
   min-width: 40px;
+  height: 28px;
 }
 
 .radio-label input[type='radio'] {
