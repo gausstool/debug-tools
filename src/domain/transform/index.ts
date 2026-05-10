@@ -258,7 +258,7 @@ export const tools: ITool[] = [
   },
   {
     icon: '🆔',
-    label: '随机UUID生成',
+    label: '随机 UUID',
     value: EnumTools.RANDOM_UUID,
     component: PageRandomUUID,
     order: 701,
@@ -266,7 +266,7 @@ export const tools: ITool[] = [
   },
   {
     icon: '🔢',
-    label: '随机数字生成',
+    label: '随机 Number',
     value: EnumTools.RANDOM_N_BASE,
     component: PageRandomNBase,
     order: 702,
@@ -274,7 +274,7 @@ export const tools: ITool[] = [
   },
   {
     icon: '🎲',
-    label: '随机密码生成',
+    label: '随机 Password',
     value: EnumTools.RANDOM_PASSWORD,
     component: PageRandomPassword,
     order: 703,
@@ -282,7 +282,7 @@ export const tools: ITool[] = [
   },
   {
     icon: '🔌',
-    label: '随机端口生成',
+    label: '随机 Port',
     value: EnumTools.RANDOM_PORT,
     component: PageRandomPort,
     order: 704,
@@ -290,7 +290,7 @@ export const tools: ITool[] = [
   },
   {
     icon: '📝',
-    label: 'Lorem 生成',
+    label: '随机 Lorem Ipsum',
     value: EnumTools.LOREM,
     component: PageLorem,
     order: 705,

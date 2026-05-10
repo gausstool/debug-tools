@@ -2,43 +2,43 @@
   <div class="page-layout">
     <div class="page-container">
       <div class="form-item">
-        <label>字符类型</label>
-        <div class="checkbox-group">
-          <label class="checkbox-label">
-            <input type="checkbox" v-model="charTypes.numeric" />
-            <span>普通数字 (0-9)</span>
-          </label>
-          <label class="checkbox-label">
-            <input type="checkbox" v-model="charTypes.lowercase" />
-            <span>小写字母 (a-z)</span>
-          </label>
-          <label class="checkbox-label">
-            <input type="checkbox" v-model="charTypes.uppercase" />
-            <span>大写字母 (A-Z)</span>
-          </label>
-          <label class="checkbox-label">
-            <input type="checkbox" v-model="charTypes.special" />
-            <span>特殊符号 (!@#$...)</span>
-          </label>
+        <label class="form-item-label">字符类型</label>
+        <div class="form-item-content">
+          <div class="checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" v-model="charTypes.numeric" />
+              <span>普通数字 (0-9)</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" v-model="charTypes.lowercase" />
+              <span>小写字母 (a-z)</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" v-model="charTypes.uppercase" />
+              <span>大写字母 (A-Z)</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" v-model="charTypes.special" />
+              <span>特殊符号 (!@#$...)</span>
+            </label>
+          </div>
         </div>
       </div>
       <div class="form-item">
-        <label>字符长度</label>
-        <input type="number" v-model="length" min="1" max="1000" />
+        <label class="form-item-label">字符长度</label>
+        <div class="form-item-content">
+          <input type="number" v-model="length" min="1" max="1000" />
+        </div>
       </div>
       <div class="form-item">
-        <label>生成结果</label>
-        <input
-          type="text"
-          v-model="result"
-          readonly
-          @click="copyToClipboard"
-          :title="result ? '点击复制到剪贴板' : ''"
-          :class="{ clickable: result }"
-        />
+        <label class="form-item-label">批量生成</label>
+        <div class="form-item-content">
+          <input type="number" v-model="batchCount" min="1" max="100" />
+        </div>
       </div>
+      <ResultTextarea v-model="result" />
       <div>
-        <button class="g-button" @click="generateString">生成字符</button>
+        <button class="g-button" @click="generateString">生成</button>
         <button class="g-button" @click="resetForm">重置</button>
       </div>
     </div>
@@ -48,8 +48,10 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
 import { randomString } from '@/domain/transform/modules/random/random-password';
+import ResultTextarea from '@/components/ResultTextarea.vue';
 
 const length = ref(16);
+const batchCount = ref(1);
 const result = ref('');
 
 const charTypes = ref({
@@ -81,14 +83,19 @@ function generateString() {
       result.value = '请至少选择一种字符类型';
       return;
     }
-    result.value = randomString(length.value, chars.value);
+    const results: string[] = [];
+    for (let i = 0; i < batchCount.value; i++) {
+      results.push(randomString(length.value, chars.value));
+    }
+    result.value = results.join('\n');
   } catch (error) {
     result.value = error instanceof Error ? error.message : '生成失败';
   }
 }
 
 function resetForm() {
-  length.value = 12;
+  length.value = 16;
+  batchCount.value = 1;
   charTypes.value = {
     numeric: true,
     lowercase: true,
@@ -96,29 +103,6 @@ function resetForm() {
     special: false,
   };
   result.value = '';
-}
-
-async function copyToClipboard() {
-  if (!result.value) return;
-
-  try {
-    await navigator.clipboard.writeText(result.value);
-  } catch {
-    const textArea = document.createElement('textarea');
-    textArea.value = result.value;
-    textArea.style.position = 'fixed';
-    textArea.style.left = '-999999px';
-    textArea.style.top = '-999999px';
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-    try {
-      document.execCommand('copy');
-    } catch (err) {
-      console.error('复制失败:', err);
-    }
-    document.body.removeChild(textArea);
-  }
 }
 </script>
 
@@ -144,11 +128,22 @@ async function copyToClipboard() {
   gap: 10px;
 }
 
-.form-item label {
+.form-item-label {
   color: #ffffff;
   font-size: 12px;
   min-width: 120px;
   padding-top: 5px;
+}
+
+.form-item-content {
+  flex: 1;
+}
+
+.form-item-content > input,
+.form-item-content > select,
+.form-item-content > .checkbox-group,
+.form-item-content > .radio-group {
+  width: 100%;
 }
 
 .form-item input[type='number'],
@@ -160,37 +155,56 @@ async function copyToClipboard() {
   padding: 5px 10px;
   border-radius: 3px;
   flex: 1;
+  height: 28px;
+  box-sizing: border-box;
 }
 
-.form-item input:read-only {
+.form-item textarea {
+  outline: none;
+  border: none;
+  background-color: #3c3c3c;
+  color: #ffffff;
+  padding: 0;
+  border-radius: 3px;
+  flex: 1;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.form-item input:read-only,
+.form-item textarea:read-only {
   background-color: #2a2a2a;
   color: #888888;
 }
 
-.form-item input.clickable {
+.form-item input.clickable,
+.form-item textarea.clickable {
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
-.form-item input.clickable:hover {
+.form-item input.clickable:hover,
+.form-item textarea.clickable:hover {
   background-color: #3a3a3a;
 }
 
 .checkbox-group {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-direction: row;
+  gap: 16px;
   flex: 1;
+  align-items: center;
+  height: 28px;
 }
 
 .checkbox-label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   color: #ffffff;
   font-size: 12px;
   cursor: pointer;
-  padding: 5px 0;
+  height: 28px;
 }
 
 .checkbox-label input[type='checkbox'] {

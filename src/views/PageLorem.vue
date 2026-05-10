@@ -2,30 +2,26 @@
   <div class="page-layout">
     <div class="page-container">
       <div class="form-item">
-        <label>段落数量</label>
-        <input type="number" v-model="paragraphs" min="1" max="32" />
+        <label class="form-item-label">段落数量</label>
+        <div class="form-item-content">
+          <input type="number" v-model="paragraphs" min="1" max="32" />
+        </div>
       </div>
       <div class="form-item">
-        <label>每段句子数</label>
-        <input type="number" v-model="sentencesPerParagraph" min="1" max="32" />
+        <label class="form-item-label">每段句子数</label>
+        <div class="form-item-content">
+          <input type="number" v-model="sentencesPerParagraph" min="1" max="32" />
+        </div>
       </div>
       <div class="form-item">
-        <label>每句单词数</label>
-        <input type="number" v-model="wordsPerSentence" min="1" max="32" />
+        <label class="form-item-label">每句单词数</label>
+        <div class="form-item-content">
+          <input type="number" v-model="wordsPerSentence" min="1" max="32" />
+        </div>
       </div>
-      <div class="form-item">
-        <label>生成结果</label>
-        <textarea
-          v-model="result"
-          readonly
-          @click="copyToClipboard"
-          :title="result ? '点击复制到剪贴板' : ''"
-          :class="{ clickable: result }"
-          rows="6"
-        ></textarea>
-      </div>
+      <ResultTextarea v-model="result" />
       <div>
-        <button class="g-button" @click="generateLorem">生成文本</button>
+        <button class="g-button" @click="generateLorem">生成</button>
         <button class="g-button" @click="resetForm">重置</button>
       </div>
     </div>
@@ -35,6 +31,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { generateLorem as genLorem } from '@/domain/transform/modules/random/random-lorem';
+import ResultTextarea from '@/components/ResultTextarea.vue';
 
 const paragraphs = ref(1);
 const sentencesPerParagraph = ref(3);
@@ -60,29 +57,6 @@ function resetForm() {
   wordsPerSentence.value = 8;
   result.value = '';
 }
-
-async function copyToClipboard() {
-  if (!result.value) return;
-
-  try {
-    await navigator.clipboard.writeText(result.value);
-  } catch {
-    const textArea = document.createElement('textarea');
-    textArea.value = result.value;
-    textArea.style.position = 'fixed';
-    textArea.style.left = '-999999px';
-    textArea.style.top = '-999999px';
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-    try {
-      document.execCommand('copy');
-    } catch (err) {
-      console.error('复制失败:', err);
-    }
-    document.body.removeChild(textArea);
-  }
-}
 </script>
 
 <style lang="scss" scoped>
@@ -107,20 +81,42 @@ async function copyToClipboard() {
   gap: 10px;
 }
 
-.form-item label {
+.form-item-label {
   color: #ffffff;
   font-size: 12px;
   min-width: 120px;
   padding-top: 5px;
 }
 
-.form-item input[type='number'],
-.form-item textarea {
+.form-item-content {
+  flex: 1;
+}
+
+.form-item-content > input,
+.form-item-content > select,
+.form-item-content > .checkbox-group,
+.form-item-content > .radio-group {
+  width: 100%;
+}
+
+.form-item input[type='number'] {
   outline: none;
   border: none;
   background-color: #3c3c3c;
   color: #ffffff;
   padding: 5px 10px;
+  border-radius: 3px;
+  flex: 1;
+  height: 28px;
+  box-sizing: border-box;
+}
+
+.form-item textarea {
+  outline: none;
+  border: none;
+  background-color: #3c3c3c;
+  color: #ffffff;
+  padding: 0;
   border-radius: 3px;
   flex: 1;
   font-family: inherit;
