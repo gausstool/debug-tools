@@ -77,5 +77,4 @@ git push origin :refs/tags/v1.6.0
 
 ### 4. GitHub Release
 
-Tag 推送后，在 GitHub 手动创建 Release：
-https://github.com/gausstool/debug-tools/releases/new?tag=v1.6.0
+Tag 推送后自动创建（通过 `.github/workflows/release.yml`）
