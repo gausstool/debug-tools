@@ -4,10 +4,14 @@
       <div class="form-item">
         <label class="form-item-label">输出格式</label>
         <div class="form-item-content">
-          <select v-model="outputFormat">
-            <option value="paragraph">段落</option>
-            <option value="list">列表</option>
-          </select>
+          <label class="radio-label">
+            <input type="radio" v-model="outputFormat" value="paragraph" />
+            段落
+          </label>
+          <label class="radio-label">
+            <input type="radio" v-model="outputFormat" value="list" />
+            列表
+          </label>
         </div>
       </div>
       <div class="form-item">
@@ -157,6 +161,16 @@ function resetForm() {
   border-radius: 3px;
   height: 28px;
   box-sizing: border-box;
+}
+
+.radio-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 12px;
+  margin-right: 15px;
 }
 
 .form-item input[type='number'] {
