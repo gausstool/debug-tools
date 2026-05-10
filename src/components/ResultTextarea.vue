@@ -89,7 +89,7 @@ async function handleCopy() {
   outline: none;
   border: none;
   background-color: #2a2a2a;
-  color: #666666;
+  color: #aaaaaa;
   padding: 10px;
   border-radius: 3px;
   flex: 1;
@@ -101,7 +101,7 @@ async function handleCopy() {
 .result-wrapper textarea.clickable {
   cursor: pointer;
   transition: background-color 0.2s;
-  color: #ffffff;
+  color: #cccccc;
 }
 
 .result-wrapper textarea.clickable:hover {
