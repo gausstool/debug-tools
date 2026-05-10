@@ -34,10 +34,13 @@ function generateWords(count: number): string {
   return words.join(' ');
 }
 
+const CLASSIC_START = 'Lorem ipsum dolor sit amet';
+
 export interface LoremOptions {
   paragraphs: number;
   sentencesPerParagraph: number;
   wordsPerSentence: number;
+  startWithClassic?: boolean;
 }
 
 export function generateLorem(options: Partial<LoremOptions> = {}): string {
@@ -45,6 +48,7 @@ export function generateLorem(options: Partial<LoremOptions> = {}): string {
     paragraphs = 1,
     sentencesPerParagraph = 3,
     wordsPerSentence = 8,
+    startWithClassic = false,
   } = options;
 
   const paragraphsArr: string[] = [];
@@ -52,8 +56,22 @@ export function generateLorem(options: Partial<LoremOptions> = {}): string {
   for (let p = 0; p < paragraphs; p++) {
     const sentences: string[] = [];
     for (let i = 0; i < sentencesPerParagraph; i++) {
-      let sentence = generateWords(wordsPerSentence);
+      let sentence: string;
+      if (p === 0 && i === 0 && startWithClassic) {
+        const remainingWords = wordsPerSentence - CLASSIC_START.split(' ').length;
+        if (remainingWords > 0) {
+          const extraWords = getRandomElements(LOREM_WORDS, remainingWords).join(' ');
+          sentence = CLASSIC_START + ' ' + extraWords;
+        } else {
+          sentence = CLASSIC_START;
+        }
+      } else {
+        sentence = generateWords(wordsPerSentence);
+      }
       sentence = sentence.replace(/\.$/, '') + '.';
+      if (p === 0 && i === 0 && startWithClassic) {
+        sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1);
+      }
       sentences.push(sentence);
     }
     const paragraph = sentences.join(' ');

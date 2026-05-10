@@ -19,6 +19,12 @@
           <input type="number" v-model="wordsPerSentence" min="1" max="32" />
         </div>
       </div>
+      <div class="form-item">
+        <label class="form-item-label">
+          <input type="checkbox" v-model="startWithClassic" />
+          从"Lorem ipsum..."开始
+        </label>
+      </div>
       <ResultTextarea v-model="result" />
       <div>
         <button class="g-button" @click="generateLorem">生成</button>
@@ -36,6 +42,7 @@ import ResultTextarea from '@/components/ResultTextarea.vue';
 const paragraphs = ref(1);
 const sentencesPerParagraph = ref(3);
 const wordsPerSentence = ref(8);
+const startWithClassic = ref(false);
 const result = ref('');
 
 function generateLorem() {
@@ -44,6 +51,7 @@ function generateLorem() {
       paragraphs: paragraphs.value,
       sentencesPerParagraph: sentencesPerParagraph.value,
       wordsPerSentence: wordsPerSentence.value,
+      startWithClassic: startWithClassic.value,
     });
     result.value = text;
   } catch (error) {
@@ -55,6 +63,7 @@ function resetForm() {
   paragraphs.value = 1;
   sentencesPerParagraph.value = 3;
   wordsPerSentence.value = 8;
+  startWithClassic.value = false;
   result.value = '';
 }
 </script>
@@ -86,6 +95,16 @@ function resetForm() {
   font-size: 12px;
   min-width: 120px;
   padding-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.form-item-label input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
 }
 
 .form-item-content {
