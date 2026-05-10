@@ -20,10 +20,13 @@
         </div>
       </div>
       <div class="form-item">
-        <label class="form-item-label">
-          <input type="checkbox" v-model="startWithClassic" />
-          从"Lorem ipsum..."开始
-        </label>
+        <label class="form-item-label">开头选项</label>
+        <div class="form-item-content">
+          <label class="checkbox-label">
+            <input type="checkbox" v-model="startWithClassic" />
+            从"Lorem ipsum..."开始
+          </label>
+        </div>
       </div>
       <ResultTextarea v-model="result" />
       <div>
@@ -102,6 +105,21 @@ function resetForm() {
 }
 
 .form-item-label input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.checkbox-label input[type='checkbox'] {
   width: 16px;
   height: 16px;
   cursor: pointer;
