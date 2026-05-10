@@ -78,3 +78,10 @@ git push origin :refs/tags/v1.6.0
 ### 4. GitHub Release
 
 Tag 推送后自动创建（通过 `.github/workflows/release.yml`）
+
+### 5. 上线部署
+
+```bash
+# 执行上线脚本
+sh shells/gh-pages.sh
+```
