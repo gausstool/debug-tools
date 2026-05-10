@@ -30,6 +30,7 @@ export enum EnumTools {
     RANDOM_PORT = "random-port",
     RANDOM_UUID = "random-uuid",
     RANDOM_N_BASE = "random-n-base",
+    LOREM = "random-lorem",
     
     NGINX_LOG_PARSE = "nginx-log-parse",
     REGEX_TEST = "regex-test",

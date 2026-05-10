@@ -16,7 +16,7 @@ EOF
 
 # 构建
 echo "正在构建..."
-npm i
+pnpm i
 npm run build
 
 # 进入构建目录

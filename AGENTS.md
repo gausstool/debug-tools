@@ -36,3 +36,52 @@ src/
 - **文件命名**: 页面/组件 `PageXxx.vue`, `LayoutXxx.vue`; 其他 `kebab-case.ts`
 - **提交前**: 运行 `pnpm lint`
 - **TypeScript**: `strict: true`
+
+---
+
+## 发布流程
+
+### 1. 正式版本发布
+
+```bash
+# 1. 更新 package.json 中的版本号 (如 1.6.0)
+# 2. 提交更改
+git add package.json
+git commit -m "chore: 发布 v1.6.0"
+
+# 3. 推送代码和 tag
+git push origin develop
+git tag v1.6.0
+git push origin v1.6.0
+```
+
+### 2. Beta 版本发布
+
+```bash
+# 1. 更新 package.json 中的版本号 (如 1.6.0.beta.9)
+# 2. 提交更改
+git add package.json
+git commit -m "chore: 升级至 v1.6.0.beta.9"
+
+# 3. 推送代码和 tag
+git push origin develop
+git tag v1.6.0.beta.9
+git push origin v1.6.0.beta.9
+```
+
+### 3. 删除远程 Tag（如需撤回）
+
+```bash
+git push origin :refs/tags/v1.6.0
+```
+
+### 4. GitHub Release
+
+Tag 推送后自动创建（通过 `.github/workflows/release.yml`）
+
+### 5. 上线部署
+
+```bash
+# 执行上线脚本
+sh shells/gh-pages.sh
+```
