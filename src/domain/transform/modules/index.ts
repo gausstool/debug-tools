@@ -13,7 +13,6 @@ import { httpCacheAnalyze } from './http/http-cache-analyze';
 import { httpCorsAnalyze } from './http/http-cors-analyze';
 import { textSort } from './text/text-sort';
 import { commaSplit, lineSplit, semiSplit } from './text/text-split';
-import { nginxLogParser } from './http/nginx-log-parse';
 import { randomPassword } from './random/random-password';
 import { srtToPlainText } from './text/srt';
 import { randomPortString } from './random/random-port';
@@ -26,7 +25,6 @@ export const methodMap: Record<EnumTools, ToolFunction> = {
   [EnumTools.TEXT_DIFF]: (input: string) => input, // Placeholder for text diff function
   [EnumTools.TEXT_SORT]: textSort, // Placeholder for text sort function
   [EnumTools.TEXT_SIZE]: sizeofByte,
-  [EnumTools.REGEX_TEST]: (input: string) => input, // Placeholder for regex test function
   [EnumTools.URL_PARSE]: urlParse,
   [EnumTools.URL_ENCODE]: urlEncode,
   [EnumTools.URL_DECODE]: urlDecode,
@@ -44,7 +42,6 @@ export const methodMap: Record<EnumTools, ToolFunction> = {
   [EnumTools.TEXT_SPLIT_BY_SEMI]: semiSplit,
   [EnumTools.TEXT_SPLIT_BY_COMMA]: commaSplit,
   [EnumTools.TEXT_SPLIT_BY_LINE]: lineSplit,
-  [EnumTools.NGINX_LOG_PARSE]: nginxLogParser,
   [EnumTools.RANDOM_PASSWORD]: randomPassword,
   [EnumTools.TEXT_SRT_PLAIN]: srtToPlainText,
   [EnumTools.RANDOM_PORT]: randomPortString,
@@ -53,6 +50,7 @@ export const methodMap: Record<EnumTools, ToolFunction> = {
   [EnumTools.CSS_TO_SASS]: cssToSass,
   [EnumTools.CSS_TO_SCSS]: cssToScss,
   [EnumTools.LOREM]: (input: string) => input, // Placeholder for lorem function
+  [EnumTools.TOOL_LINKS]: (input: string) => input, // Placeholder for tool links function
 };
 
 export async function processContent(input: string, type: EnumTools) {

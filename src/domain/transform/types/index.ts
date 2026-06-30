@@ -32,9 +32,8 @@ export enum EnumTools {
     RANDOM_N_BASE = "random-n-base",
     LOREM = "random-lorem",
     
-    NGINX_LOG_PARSE = "nginx-log-parse",
-    REGEX_TEST = "regex-test",
-
     CSS_TO_SASS = "css-to-sass",
     CSS_TO_SCSS = "css-to-scss",
+
+    TOOL_LINKS = "tool-links",
 }
