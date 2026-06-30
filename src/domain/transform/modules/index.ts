@@ -50,6 +50,7 @@ export const methodMap: Record<EnumTools, ToolFunction> = {
   [EnumTools.CSS_TO_SASS]: cssToSass,
   [EnumTools.CSS_TO_SCSS]: cssToScss,
   [EnumTools.LOREM]: (input: string) => input, // Placeholder for lorem function
+  [EnumTools.TOOL_LINKS]: (input: string) => input, // Placeholder for tool links function
 };
 
 export async function processContent(input: string, type: EnumTools) {
