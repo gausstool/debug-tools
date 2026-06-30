@@ -1,13 +1,12 @@
 import { EnumTools } from './types';
 import PageWelcome from '@/views/PageWelcome.vue';
 const EditorDouble = () => import('@/views/PageEditorDouble.vue');
-const PageNginxLog = () => import('@/views/PageNginxLog.vue');
-const PageRegExp = () => import('@/views/PageRegExp.vue');
 const PageRandomPassword = () => import('@/views/PageRandomPassword.vue');
 const PageRandomPort = () => import('@/views/PageRandomPort.vue');
 const PageRandomUUID = () => import('@/views/PageRandomUUID.vue');
 const PageRandomNBase = () => import('@/views/PageRandomNBase.vue');
 const PageLorem = () => import('@/views/PageLorem.vue');
+const PageToolLinks = () => import('@/views/PageToolLinks.vue');
 
 export interface ITool {
   icon?: string;
@@ -305,20 +304,19 @@ export const tools: ITool[] = [
     space: true,
   },
   {
-    icon: '🔍',
-    label: '正则表达式',
-    value: EnumTools.REGEX_TEST,
-    component: PageRegExp,
-    order: 801,
-    description: '测试正则表达式对文本字符串的匹配情况',
+    label: '其他工具',
+    value: '',
+    component: EditorDouble,
+    order: 900,
+    space: true,
   },
   {
-    icon: '⛁',
-    label: 'Nginx 日志解析',
-    value: EnumTools.NGINX_LOG_PARSE,
-    component: PageNginxLog,
-    order: 802,
-    description: '解析 Nginx 日志文件，提取请求信息',
+    icon: '🔗',
+    label: '常用工具网站',
+    value: EnumTools.TOOL_LINKS,
+    component: PageToolLinks,
+    order: 901,
+    description: '常用开发者工具网站导航',
   },
 ].sort((a, b) => a.order - b.order);
 
